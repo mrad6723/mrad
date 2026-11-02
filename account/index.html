@@ -12,10 +12,10 @@
       --bg-dark: #07090e;
       --card-bg: rgba(18, 24, 38, 0.75);
       --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover-border: rgba(56, 189, 248, 0.35);
       --accent-cyan: #38bdf8;
       --accent-indigo: #6366f1;
       --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --input-bg: rgba(11, 15, 25, 0.8);
@@ -41,14 +41,13 @@
       padding: 0 20px;
     }
 
-    /* Ambient background glows */
     .glow-blob {
       position: absolute;
       width: 500px;
       height: 500px;
       border-radius: 50%;
       filter: blur(140px);
-      opacity: 0.2;
+      opacity: 0.18;
       pointer-events: none;
       z-index: 0;
     }
@@ -63,7 +62,6 @@
       background: radial-gradient(circle, var(--accent-indigo), transparent);
     }
 
-    /* Top navigation */
     header {
       position: relative;
       z-index: 10;
@@ -119,7 +117,6 @@
       color: var(--accent-cyan);
     }
 
-    /* Main Container */
     main {
       position: relative;
       z-index: 10;
@@ -139,7 +136,7 @@
 
     .auth-header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .auth-header h1 {
@@ -157,7 +154,6 @@
       font-size: 0.9rem;
     }
 
-    /* Auth Mode Switcher */
     .tab-bar {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -188,7 +184,6 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    /* Form Styles */
     form {
       display: flex;
       flex-direction: column;
@@ -215,16 +210,6 @@
       letter-spacing: 0.02em;
     }
 
-    .forgot-link {
-      font-size: 0.75rem;
-      color: var(--accent-cyan);
-      text-decoration: none;
-    }
-
-    .forgot-link:hover {
-      text-decoration: underline;
-    }
-
     input[type="email"],
     input[type="password"],
     input[type="text"] {
@@ -236,8 +221,8 @@
       color: #fff;
       font-size: 0.95rem;
       font-family: inherit;
-      transition: border-color 0.2s, box-shadow 0.2s;
       outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     input:focus {
@@ -261,79 +246,102 @@
       box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
     }
 
-    .submit-btn:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
-    /* SSO Divider */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 22px 0;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    .msg-banner {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      text-align: left;
     }
 
-    .divider::before,
-    .divider::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.08);
+    .msg-banner.error {
+      display: block;
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fda4af;
     }
 
-    /* SSO Buttons */
-    .sso-grid {
+    .msg-banner.success {
+      display: block;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    /* Dashboard state */
+    .dashboard-view {
+      display: none;
+      text-align: center;
+    }
+
+    .user-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 700;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      place-items: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.3);
+    }
+
+    .user-meta {
+      background: rgba(11, 15, 25, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px 0;
+      text-align: left;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
       gap: 10px;
     }
 
-    .sso-btn {
+    .meta-row {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      font-weight: 600;
-      font-family: inherit;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      justify-content: space-between;
+      overflow: hidden;
     }
 
-    .sso-btn:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-
-    .sso-btn svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    /* Footer badge */
-    .security-note {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 24px;
-      font-size: 0.78rem;
+    .meta-label {
       color: var(--text-muted);
     }
 
-    .security-note svg {
-      color: var(--accent-emerald);
+    .meta-val {
+      color: #fff;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      background: rgba(244, 63, 94, 0.1);
+      color: #fda4af;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(244, 63, 94, 0.2);
     }
 
     footer {
@@ -351,22 +359,8 @@
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .footer-links {
-      display: flex;
-      gap: 18px;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-
-    .footer-links a:hover {
-      color: var(--text-main);
-    }
-
     .hidden {
-      display: none;
+      display: none !important;
     }
   </style>
 </head>
@@ -375,7 +369,6 @@
   <div class="glow-blob blob-1"></div>
   <div class="glow-blob blob-2"></div>
 
-  <!-- Header -->
   <header>
     <a href="https://mrad.co" class="brand">
       <div class="brand-mark">M</div>
@@ -384,109 +377,194 @@
     <a href="https://mrad.co" class="back-link">&larr; Return to MRAD.co</a>
   </header>
 
-  <!-- Auth Card -->
   <main>
     <div class="auth-card">
-      <div class="auth-header">
-        <h1 id="portal-heading">Sign In</h1>
-        <p id="portal-subheading">Enter your credentials to access your unified portal.</p>
-      </div>
+      <div id="msg-box" class="msg-banner"></div>
 
-      <div class="tab-bar">
-        <button class="tab-btn active" id="tab-login" onclick="setMode('login')">Sign In</button>
-        <button class="tab-btn" id="tab-register" onclick="setMode('register')">Register</button>
-      </div>
-
-      <form id="auth-form" onsubmit="handleAuth(event)">
-        <div class="input-group hidden" id="group-name">
-          <label for="user-name">Full Name</label>
-          <input type="text" id="user-name" placeholder="John Doe" autocomplete="name" />
+      <!-- AUTH FORM VIEW -->
+      <div id="auth-container">
+        <div class="auth-header">
+          <h1 id="portal-heading">Sign In</h1>
+          <p id="portal-subheading">Enter your credentials to access your unified portal.</p>
         </div>
 
-        <div class="input-group">
-          <label for="user-email">Email Address</label>
-          <input type="email" id="user-email" placeholder="name@mrad.co" required autocomplete="email" />
+        <div class="tab-bar">
+          <button class="tab-btn active" id="tab-login" type="button">Sign In</button>
+          <button class="tab-btn" id="tab-register" type="button">Register</button>
         </div>
 
-        <div class="input-group">
-          <div class="input-header">
-            <label for="user-password">Password</label>
-            <a href="https://support.mrad.co" class="forgot-link" id="link-forgot">Forgot?</a>
+        <form id="auth-form">
+          <div class="input-group hidden" id="group-name">
+            <label for="user-name">Full Name</label>
+            <input type="text" id="user-name" placeholder="John Doe" autocomplete="name" />
           </div>
-          <input type="password" id="user-password" placeholder="••••••••••••" required autocomplete="current-password" />
-        </div>
 
-        <button type="submit" class="submit-btn" id="btn-submit">Continue with MRAD ID</button>
-      </form>
+          <div class="input-group">
+            <label for="user-email">Email Address</label>
+            <input type="email" id="user-email" placeholder="name@mrad.co" required autocomplete="email" />
+          </div>
 
-      <div class="divider">or authenticate with</div>
+          <div class="input-group">
+            <label for="user-password">Password</label>
+            <input type="password" id="user-password" placeholder="••••••••••••" required autocomplete="current-password" />
+          </div>
 
-      <div class="sso-grid">
-        <button type="button" class="sso-btn" onclick="alert('Google Auth hook ready for Firebase SDK')">
-          <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.3l3.7 2.9C6.2 7.3 8.8 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.6 7.3C.6 9.3 0 11.6 0 14s.6 4.7 1.6 6.7l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.2 0-5.8-2.3-6.7-5.2L1.6 16c1.9 3.7 5.8 7 10.4 7z"/></svg>
-          Google
-        </button>
-
-        <button type="button" class="sso-btn" onclick="alert('GitHub Auth hook ready for Firebase SDK')">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-          GitHub
-        </button>
+          <button type="submit" class="submit-btn" id="btn-submit">Continue with MRAD ID</button>
+        </form>
       </div>
 
-      <div class="security-note">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        <span>End-to-End Encrypted Authentication</span>
+      <!-- DASHBOARD LOGGED IN VIEW -->
+      <div id="dashboard-container" class="dashboard-view">
+        <div class="user-avatar" id="dash-avatar">M</div>
+        <h2 id="dash-name" style="font-size: 1.4rem; margin-bottom: 4px;">User</h2>
+        <p id="dash-email" style="color: var(--accent-cyan); font-size: 0.9rem;"></p>
+
+        <div class="user-meta">
+          <div class="meta-row">
+            <span class="meta-label">MRAD ID</span>
+            <span class="meta-val" id="dash-uid">...</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Status</span>
+            <span class="meta-val" style="color: var(--accent-emerald);">Active Session</span>
+          </div>
+        </div>
+
+        <button type="button" class="logout-btn" id="btn-logout">Sign Out</button>
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
   <footer>
     <div>&copy; 2026 MRAD Organization</div>
-    <div class="footer-links">
-      <a href="https://support.mrad.co">Privacy Policy</a>
-      <a href="https://support.mrad.co">Terms of Service</a>
-      <a href="https://support.mrad.co">Help Desk</a>
-    </div>
+    <a href="https://support.mrad.co" style="color: var(--text-muted); text-decoration: none;">Support Desk</a>
   </footer>
 
-  <script>
+  <!-- Firebase Script Integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      updateProfile, 
+      onAuthStateChanged,
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0",
+      measurementId: "G-LF2M0T76FP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
     let mode = 'login';
 
-    function setMode(newMode) {
-      mode = newMode;
-      const tabLogin = document.getElementById('tab-login');
-      const tabRegister = document.getElementById('tab-register');
-      const groupName = document.getElementById('group-name');
-      const heading = document.getElementById('portal-heading');
-      const subheading = document.getElementById('portal-subheading');
-      const submitBtn = document.getElementById('btn-submit');
-      const forgotLink = document.getElementById('link-forgot');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const groupName = document.getElementById('group-name');
+    const heading = document.getElementById('portal-heading');
+    const subheading = document.getElementById('portal-subheading');
+    const submitBtn = document.getElementById('btn-submit');
+    const authForm = document.getElementById('auth-form');
+    const msgBox = document.getElementById('msg-box');
+    const authContainer = document.getElementById('auth-container');
+    const dashboardContainer = document.getElementById('dashboard-container');
+    const btnLogout = document.getElementById('btn-logout');
 
-      if (mode === 'login') {
-        tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-        groupName.classList.add('hidden');
-        heading.innerText = 'Sign In';
-        subheading.innerText = 'Enter your credentials to access your unified portal.';
-        submitBtn.innerText = 'Continue with MRAD ID';
-        forgotLink.style.display = 'inline';
-      } else {
-        tabRegister.classList.add('active');
-        tabLogin.classList.remove('active');
-        groupName.classList.remove('hidden');
-        heading.innerText = 'Create ID';
-        subheading.innerText = 'Register for access across the MRAD ecosystem.';
-        submitBtn.innerText = 'Create Account';
-        forgotLink.style.display = 'none';
-      }
+    function showMessage(text, isError = true) {
+      msgBox.className = 'msg-banner ' + (isError ? 'error' : 'success');
+      msgBox.innerText = text;
     }
 
-    function handleAuth(e) {
+    function clearMessage() {
+      msgBox.className = 'msg-banner hidden';
+      msgBox.innerText = '';
+    }
+
+    tabLogin.addEventListener('click', () => {
+      mode = 'login';
+      tabLogin.classList.add('active');
+      tabRegister.classList.remove('active');
+      groupName.classList.add('hidden');
+      heading.innerText = 'Sign In';
+      subheading.innerText = 'Enter your credentials to access your unified portal.';
+      submitBtn.innerText = 'Continue with MRAD ID';
+      clearMessage();
+    });
+
+    tabRegister.addEventListener('click', () => {
+      mode = 'register';
+      tabRegister.classList.add('active');
+      tabLogin.classList.remove('active');
+      groupName.classList.remove('hidden');
+      heading.innerText = 'Create ID';
+      subheading.innerText = 'Register for access across the MRAD ecosystem.';
+      submitBtn.innerText = 'Create Account';
+      clearMessage();
+    });
+
+    authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('user-email').value;
-      alert((mode === 'login' ? 'Signing in ' : 'Creating account for ') + email + '\n\n(Ready to link with Firebase Authentication SDK)');
-    }
+      clearMessage();
+      
+      const email = document.getElementById('user-email').value.trim();
+      const password = document.getElementById('user-password').value;
+      const name = document.getElementById('user-name').value.trim();
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Authenticating...';
+
+      try {
+        if (mode === 'register') {
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          if (name) {
+            await updateProfile(cred.user, { displayName: name });
+          }
+          showMessage('Account created successfully!', false);
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+        }
+      } catch (err) {
+        let msg = err.message;
+        if (err.code === 'auth/invalid-credential') msg = 'Invalid email or password.';
+        if (err.code === 'auth/email-already-in-use') msg = 'An account with this email already exists.';
+        if (err.code === 'auth/weak-password') msg = 'Password should be at least 6 characters.';
+        showMessage(msg, true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = mode === 'login' ? 'Continue with MRAD ID' : 'Create Account';
+      }
+    });
+
+    btnLogout.addEventListener('click', async () => {
+      await signOut(auth);
+      clearMessage();
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authContainer.classList.add('hidden');
+        dashboardContainer.style.display = 'block';
+
+        const displayName = user.displayName || 'Authorized User';
+        document.getElementById('dash-name').innerText = displayName;
+        document.getElementById('dash-email').innerText = user.email;
+        document.getElementById('dash-uid').innerText = user.uid;
+        document.getElementById('dash-avatar').innerText = displayName.charAt(0).toUpperCase();
+      } else {
+        dashboardContainer.style.display = 'none';
+        authContainer.classList.remove('hidden');
+      }
+    });
   </script>
 </body>
 </html>
