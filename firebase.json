@@ -2,7 +2,7 @@
   "hosting": [
     {
       "site": "mrad-account-id",
-      "public": "mrad/account/id",
+      "public": "account/id",
       "ignore": [
         "firebase.json",
         "**/.*",
