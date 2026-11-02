@@ -122,14 +122,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // REPLACE WITH YOUR FIREBASE CONFIG
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "id.account.mrad.co",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0",
+      measurementId: "G-LF2M0T76FP"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -137,10 +138,8 @@
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Redirect to dashboard if logged in
-        window.location.href = "/dashboard";
+        window.location.href = "/home";
       } else {
-        // Show choice UI if not logged in
         document.getElementById("loading-state").style.display = "none";
         document.getElementById("landing-ui").style.display = "block";
       }

@@ -180,14 +180,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // REPLACE WITH YOUR FIREBASE CONFIG
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "id.account.mrad.co",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0",
+      measurementId: "G-LF2M0T76FP"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -215,26 +216,27 @@
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Block login if user hasn't verified their email yet
         if (!user.emailVerified) {
-          showError("Your account registration is pending email verification. Please check your inbox.");
+          showError("Account pending verification. Please verify via the email sent to you.");
           submitBtn.innerText = "Sign In";
           submitBtn.disabled = false;
           return;
         }
 
-        // On successful verified login, redirect to dashboard
-        window.location.href = "/dashboard";
+        window.location.href = "/home";
       } catch (err) {
         submitBtn.innerText = "Sign In";
         submitBtn.disabled = false;
+        console.error("Firebase Auth Error:", err.code, err.message);
 
-        if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
+        if (err.code === "auth/unauthorized-domain") {
+          showError("Domain error: Please add 'id.account.mrad.co' to Authorized Domains in Firebase Console.");
+        } else if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
           showError("Invalid email or password.");
         } else if (err.code === "auth/too-many-requests") {
-          showError("Too many failed attempts. Please try again later.");
+          showError("Too many attempts. Please try again in a few minutes.");
         } else {
-          showError("Sign in failed. Please try again.");
+          showError("Sign in failed (" + err.code + "). Check console for details.");
         }
       }
     });
