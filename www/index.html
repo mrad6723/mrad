@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mrad — Home</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      margin-bottom: 8px;
+    }
+
+    p.tagline {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s;
+      text-align: left;
+    }
+
+    .card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <h1>MRAD</h1>
+    <p class="tagline">Cloud, identity, and digital services infrastructure.</p>
+
+    <div class="grid">
+      <a href="https://account.mrad.co" class="card">
+        <h2>Account &rarr;</h2>
+        <p>Access your user portal, authentication, and personal settings.</p>
+      </a>
+
+      <a href="https://domains.mrad.co" class="card">
+        <h2>Domains &rarr;</h2>
+        <p>Manage domain registrations, renewals, and DNS records.</p>
+      </a>
+
+      <a href="https://email.mrad.co" class="card">
+        <h2>Email &rarr;</h2>
+        <p>Sign in to webmail, mail routing, and mailbox administration.</p>
+      </a>
+
+      <a href="https://support.mrad.co" class="card">
+        <h2>Support &rarr;</h2>
+        <p>Open tickets, view documentation, and contact assistance.</p>
+      </a>
+    </div>
+
+    <footer>
+      &copy; 2026 Mrad. All rights reserved.
+    </footer>
+  </main>
+
+</body>
+</html>
