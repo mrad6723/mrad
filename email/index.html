@@ -1,5 +1,448 @@
 <!DOCTYPE html>
-<html><body style="font-family:sans-serif;text-align:center;padding:50px;">
-  <h1>Mrad</h1>
-  <p>Coming Soon</p>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MRAD Mail — Business Mail & Webmail Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --card-bg: rgba(18, 24, 38, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(56, 189, 248, 0.25);
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: rgba(11, 15, 25, 0.8);
+      --input-border: rgba(255, 255, 255, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      padding: 0 20px;
+    }
+
+    .glow-blob {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(150px);
+      opacity: 0.16;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { top: -15%; left: 20%; background: radial-gradient(circle, var(--accent-cyan), transparent); }
+    .blob-2 { bottom: 0; right: 10%; background: radial-gradient(circle, var(--accent-indigo), transparent); }
+
+    /* Header Nav */
+    header {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-nav {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover {
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main Container */
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      width: 100%;
+      margin: 20px auto 60px;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      max-width: 800px;
+      margin: 20px auto 50px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      color: var(--accent-cyan);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 2-Column Split: Sign-In Box & Setup Info */
+    .mail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 880px) {
+      .mail-grid { grid-template-columns: 1fr; }
+    }
+
+    .mail-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(20px);
+    }
+
+    .mail-card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .mail-card p.subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    label { font-size: 0.8rem; font-weight: 600; color: #cbd5e1; }
+
+    input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    input:focus { border-color: var(--accent-cyan); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 18px rgba(56, 189, 248, 0.25);
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .btn-submit:hover { opacity: 0.95; transform: translateY(-1px); }
+
+    .btn-direct-webmail {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-direct-webmail:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    /* Server Specs Table / Cards */
+    .specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      font-size: 0.88rem;
+    }
+
+    .specs-table th {
+      text-align: left;
+      padding: 10px 12px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+      font-weight: 600;
+    }
+
+    .specs-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #fff;
+    }
+
+    .specs-table code {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-cyan);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+
+    .dns-box {
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .dns-box strong { color: #fff; }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--text-main); }
+  </style>
+</head>
+<body>
+
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+
+  <!-- Header -->
+  <header>
+    <a href="https://mrad.co" class="brand">
+      <div class="brand-mark">M</div>
+      <div class="brand-title">MRAD MAIL</div>
+    </a>
+    <div class="nav-actions">
+      <a href="https://mrad.co" class="btn-nav">&larr; Return to MRAD.co</a>
+      <a href="https://account.mrad.co" class="btn-nav">Account ID</a>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main>
+    <section class="hero">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Secure Cloud Mail Gateway
+      </div>
+      <h1>Enterprise Mail Services & Client Webmail</h1>
+      <p>High-deliverability corporate email routing, webmail access, and mail server integration for MRAD-managed domain names.</p>
+    </section>
+
+    <!-- 2-Column Section -->
+    <div class="mail-grid">
+
+      <!-- 1. Webmail Sign-In -->
+      <div class="mail-card">
+        <h2>Webmail Access</h2>
+        <p class="subtitle">Sign in to your corporate inbox directly from your browser.</p>
+
+        <form id="mail-login-form">
+          <div class="form-group">
+            <label for="mail-username">Email Address</label>
+            <input type="email" id="mail-username" placeholder="user@mrad.co" required autocomplete="email" />
+          </div>
+
+          <div class="form-group">
+            <label for="mail-password">Mailbox Password</label>
+            <input type="password" id="mail-password" placeholder="••••••••••••" required autocomplete="current-password" />
+          </div>
+
+          <button type="submit" class="btn-submit">Sign In to Mailbox &rarr;</button>
+        </form>
+
+        <a href="https://mail.mrad.co" target="_blank" rel="noopener" class="btn-direct-webmail">
+          Open Direct Webmail Portal &#8599;
+        </a>
+      </div>
+
+      <!-- 2. Client Setup & Server Specs -->
+      <div class="mail-card">
+        <h2>Mail Client Configuration</h2>
+        <p class="subtitle">Use these parameters to connect Outlook, Apple Mail, Thunderbird, or mobile devices.</p>
+
+        <table class="specs-table">
+          <thead>
+            <tr>
+              <th>Protocol</th>
+              <th>Server Hostname</th>
+              <th>Port / Security</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>IMAP (Incoming)</strong></td>
+              <td><code>mail.mrad.co</code></td>
+              <td>Port <strong>993</strong> (SSL/TLS)</td>
+            </tr>
+            <tr>
+              <td><strong>POP3 (Incoming)</strong></td>
+              <td><code>mail.mrad.co</code></td>
+              <td>Port <strong>995</strong> (SSL/TLS)</td>
+            </tr>
+            <tr>
+              <td><strong>SMTP (Outgoing)</strong></td>
+              <td><code>mail.mrad.co</code></td>
+              <td>Port <strong>465</strong> (SSL/TLS)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="dns-box">
+          <strong>DNS Mail Records Required:</strong><br />
+          Ensure your domain's DNS includes the primary MX record pointing to <code>mail.mrad.co</code> (Priority 10) along with your SPF TXT record: <code>v=spf1 include:mail.mrad.co ~all</code>.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div>&copy; 2026 MRAD. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="https://mrad.co">Main Portal</a>
+      <a href="https://domains.mrad.co">Domains</a>
+      <a href="https://account.mrad.co">Account</a>
+      <a href="https://support.mrad.co">Support</a>
+    </div>
+  </footer>
+
+  <script>
+    // Form submit handler - sends credentials to webmail endpoint or redirects
+    document.getElementById('mail-login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('mail-username').value;
+      // Default fallback redirect to the webmail host
+      window.location.href = 'https://mail.mrad.co';
+    });
+  </script>
+</body>
+</html>
