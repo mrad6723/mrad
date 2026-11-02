@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MRAD Account — Dashboard</title>
+  <title>MRAD ID — Account Management</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,6 +12,7 @@
       --bg-dark: #07090e;
       --card-bg: rgba(18, 24, 38, 0.7);
       --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(56, 189, 248, 0.25);
       --accent-cyan: #38bdf8;
       --accent-indigo: #6366f1;
       --accent-emerald: #10b981;
@@ -32,28 +33,28 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
       overflow-x: hidden;
       padding: 0 20px;
     }
 
     .glow-blob {
       position: absolute;
-      width: 500px;
-      height: 500px;
+      width: 600px;
+      height: 600px;
       border-radius: 50%;
-      filter: blur(140px);
+      filter: blur(150px);
       opacity: 0.16;
       pointer-events: none;
       z-index: 0;
     }
-    .blob-1 { top: -10%; left: 15%; background: radial-gradient(circle, var(--accent-cyan), transparent); }
-    .blob-2 { bottom: -10%; right: 10%; background: radial-gradient(circle, var(--accent-indigo), transparent); }
+    .blob-1 { top: -15%; left: 20%; background: radial-gradient(circle, var(--accent-cyan), transparent); }
+    .blob-2 { bottom: 0; right: 10%; background: radial-gradient(circle, var(--accent-indigo), transparent); }
 
+    /* Header Nav */
     header {
       position: relative;
       z-index: 10;
-      max-width: 1080px;
+      max-width: 1200px;
       width: 100%;
       margin: 0 auto;
       padding: 24px 0;
@@ -71,20 +72,20 @@
     }
 
     .brand-mark {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
       display: grid;
       place-items: center;
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 1.1rem;
       color: #fff;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
     }
 
     .brand-title {
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -93,32 +94,50 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
 
-    .nav-btn {
+    .btn-nav {
       font-size: 0.85rem;
+      font-weight: 600;
       color: var(--text-muted);
       text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.04);
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
       cursor: pointer;
       font-family: inherit;
-      transition: all 0.2s ease;
     }
 
-    .nav-btn:hover {
+    .btn-nav:hover {
       color: var(--text-main);
       border-color: rgba(255, 255, 255, 0.2);
     }
 
-    /* AUTH LOGIN CARD */
-    #auth-view {
+    .btn-logout {
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.3);
+      background: rgba(244, 63, 94, 0.08);
+    }
+    .btn-logout:hover {
+      background: rgba(244, 63, 94, 0.18);
+      border-color: var(--accent-rose);
+      color: #fff;
+    }
+
+    /* Main Container */
+    main {
       position: relative;
       z-index: 10;
+      max-width: 1200px;
       width: 100%;
+      margin: 20px auto 60px;
+    }
+
+    /* Auth Login Box (Shown when logged out) */
+    #auth-view {
       max-width: 440px;
       margin: 40px auto;
     }
@@ -160,7 +179,7 @@
       color: #fff;
     }
 
-    .input-group {
+    .form-group {
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -180,11 +199,12 @@
       font-size: 0.95rem;
       outline: none;
       font-family: inherit;
+      transition: border-color 0.2s;
     }
 
     input:focus { border-color: var(--accent-cyan); }
 
-    .submit-btn {
+    .btn-submit {
       width: 100%;
       padding: 12px;
       border-radius: 10px;
@@ -197,42 +217,37 @@
       font-family: inherit;
     }
 
-    /* EXPANDED DASHBOARD VIEW */
+    /* Dashboard Layout (Shown when logged in) */
     #dashboard-view {
       display: none;
-      position: relative;
-      z-index: 10;
-      max-width: 1080px;
-      width: 100%;
-      margin: 20px auto 40px;
     }
 
-    .dash-hero {
+    .profile-hero {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 30px;
+      padding: 32px;
       backdrop-filter: blur(20px);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 20px;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
 
-    .dash-profile {
+    .profile-left {
       display: flex;
       align-items: center;
       gap: 20px;
     }
 
-    .avatar-lg {
-      width: 64px;
-      height: 64px;
-      border-radius: 16px;
+    .avatar-large {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
       background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 800;
       display: grid;
       place-items: center;
@@ -240,113 +255,117 @@
       box-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
     }
 
-    .dash-welcome h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
-    .dash-welcome p { color: var(--text-muted); font-size: 0.9rem; }
+    .profile-titles h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .profile-titles p {
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      font-family: monospace;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 6px 14px;
+      border-radius: 100px;
+    }
 
     .dash-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
     }
 
     .dash-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 24px;
-      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    .dash-card h3 {
-      font-size: 1.1rem;
+    .dash-card h2 {
+      font-size: 1.2rem;
       font-weight: 700;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      margin-bottom: 8px;
     }
 
-    .dash-card-content { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+    .dash-card-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
 
-    .meta-box {
+    .meta-list {
       background: rgba(11, 15, 25, 0.5);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 12px;
-      margin-top: 14px;
-      font-size: 0.82rem;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
     }
 
     .meta-row {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      font-size: 0.85rem;
     }
 
-    .meta-label { color: var(--text-muted); }
-    .meta-val {
+    .meta-row span:first-child { color: var(--text-muted); }
+    .meta-row span:last-child {
       color: #fff;
       font-family: monospace;
-      max-width: 170px;
+      max-width: 180px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    .btn-secondary {
-      display: inline-block;
-      text-align: center;
-      padding: 10px 16px;
-      margin-top: 16px;
-      background: rgba(255, 255, 255, 0.05);
+    .action-links {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .action-link {
+      background: rgba(11, 15, 25, 0.6);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
+      padding: 12px 16px;
+      border-radius: 10px;
       color: var(--text-main);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 600;
       text-decoration: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       transition: all 0.2s;
     }
 
-    .btn-secondary:hover {
+    .action-link:hover {
       border-color: var(--accent-cyan);
       background: rgba(56, 189, 248, 0.08);
+      transform: translateX(3px);
     }
-
-    .service-links {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .service-link {
-      background: rgba(11, 15, 25, 0.5);
-      border: 1px solid var(--card-border);
-      padding: 10px;
-      border-radius: 10px;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: border-color 0.2s;
-    }
-
-    .service-link:hover { border-color: var(--accent-cyan); }
 
     .msg-banner {
       display: none;
       padding: 10px 14px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 0.85rem;
       margin-bottom: 16px;
     }
@@ -356,14 +375,14 @@
     footer {
       position: relative;
       z-index: 10;
-      max-width: 1080px;
+      max-width: 1200px;
       width: 100%;
       margin: 0 auto;
       padding: 24px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
@@ -383,123 +402,145 @@
       <div class="brand-title">MRAD ID</div>
     </a>
     <div class="nav-actions">
-      <a href="https://mrad.co" class="nav-btn">&larr; Return to MRAD.co</a>
-      <button class="nav-btn hidden" id="btn-logout-header" style="color: var(--accent-rose);">Sign Out</button>
+      <a href="https://mrad.co" class="btn-nav">&larr; Return to MRAD.co</a>
+      <button class="btn-nav btn-logout hidden" id="btn-header-logout">Sign Out</button>
     </div>
   </header>
 
-  <!-- AUTH FORM VIEW (Logged Out) -->
-  <main id="auth-view">
-    <div class="auth-card">
-      <div id="msg-box" class="msg-banner"></div>
+  <!-- Main View -->
+  <main>
+    <!-- LOGIN VIEW (Shown when logged out) -->
+    <div id="auth-view">
+      <div class="auth-card">
+        <div id="auth-msg" class="msg-banner"></div>
 
-      <div class="tab-bar">
-        <button class="tab-btn active" id="tab-login">Sign In</button>
-        <button class="tab-btn" id="tab-register">Register</button>
+        <div class="tab-bar">
+          <button class="tab-btn active" id="tab-login" type="button">Sign In</button>
+          <button class="tab-btn" id="tab-register" type="button">Register</button>
+        </div>
+
+        <form id="auth-form">
+          <div class="form-group hidden" id="group-name">
+            <label for="login-name">Full Name</label>
+            <input type="text" id="login-name" placeholder="John Doe" autocomplete="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="login-email">Email Address</label>
+            <input type="email" id="login-email" placeholder="name@mrad.co" required autocomplete="email" />
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="••••••••••••" required autocomplete="current-password" />
+          </div>
+
+          <button type="submit" class="btn-submit" id="btn-auth-submit">Continue with MRAD ID</button>
+        </form>
       </div>
-
-      <form id="auth-form">
-        <div class="input-group hidden" id="group-name">
-          <label for="user-name">Full Name</label>
-          <input type="text" id="user-name" placeholder="John Doe" autocomplete="name" />
-        </div>
-
-        <div class="input-group">
-          <label for="user-email">Email Address</label>
-          <input type="email" id="user-email" placeholder="name@mrad.co" required autocomplete="email" />
-        </div>
-
-        <div class="input-group">
-          <label for="user-password">Password</label>
-          <input type="password" id="user-password" placeholder="••••••••••••" required autocomplete="current-password" />
-        </div>
-
-        <button type="submit" class="submit-btn" id="btn-submit">Continue with MRAD ID</button>
-      </form>
     </div>
-  </main>
 
-  <!-- DASHBOARD VIEW (Logged In) -->
-  <main id="dashboard-view">
-    <!-- Top Hero Banner -->
-    <div class="dash-hero">
-      <div class="dash-profile">
-        <div class="avatar-lg" id="dash-avatar">M</div>
-        <div class="dash-welcome">
-          <h1 id="dash-name">User</h1>
-          <p id="dash-email">user@mrad.co</p>
+    <!-- DASHBOARD VIEW (Shown when logged in) -->
+    <div id="dashboard-view">
+      <!-- Profile Header -->
+      <div class="profile-hero">
+        <div class="profile-left">
+          <div class="avatar-large" id="dash-avatar">M</div>
+          <div class="profile-titles">
+            <h1 id="dash-display-name">User</h1>
+            <p id="dash-display-email">user@mrad.co</p>
+          </div>
         </div>
-      </div>
-      <div>
-        <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); padding: 6px 14px; border-radius: 100px;">
+        <div class="status-badge">
           <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent-emerald);"></span>
-          Authenticated Session
-        </span>
-      </div>
-    </div>
-
-    <!-- Cards Grid -->
-    <div class="dash-grid">
-      <!-- Connected Ecosystem -->
-      <div class="dash-card">
-        <div>
-          <h3>
-            <span>Ecosystem Services</span>
-            <span style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: normal;">Active</span>
-          </h3>
-          <p class="dash-card-content">Jump to your connected workspaces and subdomains with single identity session authorization.</p>
-          <div class="service-links">
-            <a href="https://domains.mrad.co" class="service-link">
-              <span>Domains</span>
-              <span style="color: var(--text-muted);">&rarr;</span>
-            </a>
-            <a href="https://email.mrad.co" class="service-link">
-              <span>Email</span>
-              <span style="color: var(--text-muted);">&rarr;</span>
-            </a>
-            <a href="https://support.mrad.co" class="service-link">
-              <span>Support</span>
-              <span style="color: var(--text-muted);">&rarr;</span>
-            </a>
-            <a href="https://mrad.co" class="service-link">
-              <span>Main Portal</span>
-              <span style="color: var(--text-muted);">&rarr;</span>
-            </a>
-          </div>
+          Authenticated Client
         </div>
       </div>
 
-      <!-- Identity & Security -->
-      <div class="dash-card">
-        <div>
-          <h3>Security & Metadata</h3>
-          <p class="dash-card-content">Manage your account identifier and verify your security baseline.</p>
-          <div class="meta-box">
-            <div class="meta-row">
-              <span class="meta-label">MRAD UID</span>
-              <span class="meta-val" id="dash-uid">...</span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-label">Identity Level</span>
-              <span class="meta-val" style="color: var(--accent-cyan);">Master Account</span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-label">MFA Provider</span>
-              <span class="meta-val">Firebase Auth</span>
+      <!-- Action & Settings Grid -->
+      <div class="dash-grid">
+
+        <!-- 1. Connected Services -->
+        <div class="dash-card">
+          <div>
+            <h2>Connected Workspaces</h2>
+            <p class="dash-card-desc">Access your MRAD services with your authenticated session.</p>
+            <div class="action-links">
+              <a href="https://domains.mrad.co" class="action-link">
+                <span>Domains Registry</span>
+                <span style="color: var(--accent-cyan);">&rarr;</span>
+              </a>
+              <a href="https://email.mrad.co" class="action-link">
+                <span>Business Mailbox</span>
+                <span style="color: var(--accent-cyan);">&rarr;</span>
+              </a>
+              <a href="https://support.mrad.co" class="action-link">
+                <span>Support Desk</span>
+                <span style="color: var(--accent-cyan);">&rarr;</span>
+              </a>
             </div>
           </div>
         </div>
-        <button class="btn-secondary" id="btn-reset-pw" type="button">Send Password Reset Email</button>
+
+        <!-- 2. Security & Password Change API -->
+        <div class="dash-card">
+          <div>
+            <h2>Security & Password</h2>
+            <p class="dash-card-desc">Directly change your password or trigger a reset link.</p>
+            
+            <div id="security-msg" class="msg-banner"></div>
+
+            <form id="password-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px;">
+              <input type="password" id="new-password-val" placeholder="Enter new password (min 6 chars)" required />
+              <button type="submit" class="btn-submit" id="btn-save-pw">Update Password</button>
+            </form>
+
+            <button type="button" class="btn-nav" id="btn-send-reset-link" style="width: 100%;">
+              Send Password Reset to Email
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Profile & Account Metadata -->
+        <div class="dash-card">
+          <div>
+            <h2>Account Details</h2>
+            <p class="dash-card-desc">Technical identity properties stored on Firebase.</p>
+            
+            <div class="meta-list">
+              <div class="meta-row">
+                <span>Account UID</span>
+                <span id="dash-uid">...</span>
+              </div>
+              <div class="meta-row">
+                <span>Account Status</span>
+                <span style="color: var(--accent-emerald);">Verified Active</span>
+              </div>
+              <div class="meta-row">
+                <span>Identity Provider</span>
+                <span>Firebase Auth</span>
+              </div>
+            </div>
+
+            <!-- Display Name Update Form -->
+            <form id="name-form" style="display: flex; gap: 8px;">
+              <input type="text" id="update-name-val" placeholder="Update Full Name" required />
+              <button type="submit" class="btn-nav" style="border-color: var(--accent-cyan); white-space: nowrap;">Save Name</button>
+            </form>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
 
   <!-- Footer -->
   <footer>
-    <div>&copy; 2026 MRAD Organization</div>
+    <div>&copy; 2026 MRAD. All rights reserved.</div>
     <a href="https://support.mrad.co" style="color: var(--text-muted); text-decoration: none;">Help & Support</a>
   </footer>
 
+  <!-- Firebase Auth Module -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { 
@@ -507,8 +548,9 @@
       createUserWithEmailAndPassword, 
       signInWithEmailAndPassword, 
       updateProfile, 
+      updatePassword,
       sendPasswordResetEmail,
-      onAuthStateChanged,
+      onAuthStateChanged, 
       signOut 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
@@ -530,18 +572,23 @@
 
     const authView = document.getElementById('auth-view');
     const dashboardView = document.getElementById('dashboard-view');
-    const btnLogoutHeader = document.getElementById('btn-logout-header');
+    const btnHeaderLogout = document.getElementById('btn-header-logout');
     const tabLogin = document.getElementById('tab-login');
     const tabRegister = document.getElementById('tab-register');
     const groupName = document.getElementById('group-name');
-    const submitBtn = document.getElementById('btn-submit');
     const authForm = document.getElementById('auth-form');
-    const msgBox = document.getElementById('msg-box');
-    const btnResetPw = document.getElementById('btn-reset-pw');
+    const btnAuthSubmit = document.getElementById('btn-auth-submit');
+    const authMsg = document.getElementById('auth-msg');
+    const securityMsg = document.getElementById('security-msg');
 
-    function showMessage(text, isError = true) {
-      msgBox.className = 'msg-banner ' + (isError ? 'error' : 'success');
-      msgBox.innerText = text;
+    function setAuthMsg(text, isError = true) {
+      authMsg.className = 'msg-banner ' + (isError ? 'error' : 'success');
+      authMsg.innerText = text;
+    }
+
+    function setSecurityMsg(text, isError = true) {
+      securityMsg.className = 'msg-banner ' + (isError ? 'error' : 'success');
+      securityMsg.innerText = text;
     }
 
     tabLogin.addEventListener('click', () => {
@@ -549,7 +596,8 @@
       tabLogin.classList.add('active');
       tabRegister.classList.remove('active');
       groupName.classList.add('hidden');
-      submitBtn.innerText = 'Continue with MRAD ID';
+      btnAuthSubmit.innerText = 'Continue with MRAD ID';
+      authMsg.className = 'msg-banner';
     });
 
     tabRegister.addEventListener('click', () => {
@@ -557,63 +605,119 @@
       tabRegister.classList.add('active');
       tabLogin.classList.remove('active');
       groupName.classList.remove('hidden');
-      submitBtn.innerText = 'Create Account';
+      btnAuthSubmit.innerText = 'Create Account';
+      authMsg.className = 'msg-banner';
     });
 
+    // 1. Sign In / Register Handler
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('user-email').value.trim();
-      const password = document.getElementById('user-password').value;
-      const name = document.getElementById('user-name').value.trim();
+      authMsg.className = 'msg-banner';
+      
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const name = document.getElementById('login-name').value.trim();
 
-      submitBtn.disabled = true;
-      submitBtn.innerText = 'Authenticating...';
+      btnAuthSubmit.disabled = true;
+      btnAuthSubmit.innerText = 'Authenticating...';
 
       try {
         if (mode === 'register') {
           const cred = await createUserWithEmailAndPassword(auth, email, password);
-          if (name) await updateProfile(cred.user, { displayName: name });
+          if (name) {
+            await updateProfile(cred.user, { displayName: name });
+          }
         } else {
           await signInWithEmailAndPassword(auth, email, password);
         }
       } catch (err) {
-        showMessage(err.message, true);
+        setAuthMsg(err.message, true);
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = mode === 'login' ? 'Continue with MRAD ID' : 'Create Account';
+        btnAuthSubmit.disabled = false;
+        btnAuthSubmit.innerText = mode === 'login' ? 'Continue with MRAD ID' : 'Create Account';
       }
     });
 
-    btnLogoutHeader.addEventListener('click', async () => {
+    // 2. Sign Out Handler
+    btnHeaderLogout.addEventListener('click', async () => {
       await signOut(auth);
     });
 
-    btnResetPw.addEventListener('click', async () => {
+    // 3. Update Password API Call
+    document.getElementById('password-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newPassword = document.getElementById('new-password-val').value;
+      const btnSavePw = document.getElementById('btn-save-pw');
+
+      if (!newPassword || newPassword.length < 6) {
+        setSecurityMsg('Password must be at least 6 characters long.', true);
+        return;
+      }
+
+      btnSavePw.disabled = true;
+      btnSavePw.innerText = 'Updating...';
+
+      try {
+        await updatePassword(auth.currentUser, newPassword);
+        setSecurityMsg('Password updated successfully!', false);
+        document.getElementById('new-password-val').value = '';
+      } catch (err) {
+        if (err.code === 'auth/requires-recent-login') {
+          setSecurityMsg('For security, please log out and log in again before changing your password.', true);
+        } else {
+          setSecurityMsg(err.message, true);
+        }
+      } finally {
+        btnSavePw.disabled = false;
+        btnSavePw.innerText = 'Update Password';
+      }
+    });
+
+    // 4. Send Password Reset Email
+    document.getElementById('btn-send-reset-link').addEventListener('click', async () => {
       if (auth.currentUser && auth.currentUser.email) {
         try {
           await sendPasswordResetEmail(auth, auth.currentUser.email);
-          alert('Password reset instructions sent to ' + auth.currentUser.email);
-        } catch(e) {
-          alert('Error sending reset email: ' + e.message);
+          setSecurityMsg('Reset instructions sent to ' + auth.currentUser.email, false);
+        } catch (err) {
+          setSecurityMsg(err.message, true);
         }
       }
     });
 
+    // 5. Update Profile Name
+    document.getElementById('name-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newName = document.getElementById('update-name-val').value.trim();
+      if (!newName) return;
+
+      try {
+        await updateProfile(auth.currentUser, { displayName: newName });
+        document.getElementById('dash-display-name').innerText = newName;
+        document.getElementById('dash-avatar').innerText = newName.charAt(0).toUpperCase();
+        setSecurityMsg('Profile name updated!', false);
+        document.getElementById('update-name-val').value = '';
+      } catch (err) {
+        setSecurityMsg(err.message, true);
+      }
+    });
+
+    // 6. Auth State Observer
     onAuthStateChanged(auth, (user) => {
       if (user) {
         authView.style.display = 'none';
         dashboardView.style.display = 'block';
-        btnLogoutHeader.classList.remove('hidden');
+        btnHeaderLogout.classList.remove('hidden');
 
         const displayName = user.displayName || user.email.split('@')[0];
-        document.getElementById('dash-name').innerText = displayName;
-        document.getElementById('dash-email').innerText = user.email;
+        document.getElementById('dash-display-name').innerText = displayName;
+        document.getElementById('dash-display-email').innerText = user.email;
         document.getElementById('dash-uid').innerText = user.uid;
         document.getElementById('dash-avatar').innerText = displayName.charAt(0).toUpperCase();
       } else {
         dashboardView.style.display = 'none';
         authView.style.display = 'block';
-        btnLogoutHeader.classList.add('hidden');
+        btnHeaderLogout.classList.add('hidden');
       }
     });
   </script>
