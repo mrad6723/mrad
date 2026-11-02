@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MRAD ID — Customer Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    p.subtitle {
+      font-size: 0.85rem;
+      color: #8b949e;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+      color: #c9d1d9;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e6edf3;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #58a6ff;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      background: #238636;
+      border: 1px solid rgba(240, 246, 252, 0.1);
+      border-radius: 6px;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .btn:hover {
+      background: #2ea043;
+    }
+
+    .btn-secondary {
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      margin-top: 8px;
+    }
+
+    .btn-secondary:hover {
+      background: #30363d;
+    }
+
+    .msg {
+      font-size: 0.8rem;
+      margin-top: 12px;
+      text-align: center;
+      display: none;
+    }
+
+    .msg.error {
+      display: block;
+      color: #f85149;
+    }
+
+    .msg.success {
+      display: block;
+      color: #3fb950;
+    }
+
+    /* Logged in view */
+    #dashboard-view {
+      display: none;
+    }
+
+    .user-info {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+    }
+
+    .user-info div {
+      margin-bottom: 6px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- AUTH VIEW (Sign In / Register) -->
+    <div id="auth-view">
+      <h1>MRAD ID</h1>
+      <p class="subtitle">Sign in to manage your account and services</p>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="name@example.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" />
+      </div>
+
+      <button class="btn" id="btn-login">Sign In</button>
+      <button class="btn btn-secondary" id="btn-signup">Create Account</button>
+      <div id="auth-msg" class="msg"></div>
+    </div>
+
+    <!-- DASHBOARD VIEW (Shown when authenticated) -->
+    <div id="dashboard-view">
+      <h1>Customer Dashboard</h1>
+      <p class="subtitle">Welcome to your MRAD control panel</p>
+
+      <div class="user-info">
+        <div><strong>Email:</strong> <span id="user-email">-</span></div>
+        <div><strong>User ID:</strong> <span id="user-uid">-</span></div>
+      </div>
+
+      <button class="btn btn-secondary" id="btn-logout">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getAuth, 
+      onAuthStateChanged, 
+      signInWithEmailAndPassword, 
+      createUserWithEmailAndPassword, 
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const authView = document.getElementById('auth-view');
+    const dashboardView = document.getElementById('dashboard-view');
+    const authMsg = document.getElementById('auth-msg');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    // Auth State Listener
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authView.style.display = 'none';
+        dashboardView.style.display = 'block';
+        document.getElementById('user-email').innerText = user.email;
+        document.getElementById('user-uid').innerText = user.uid;
+      } else {
+        authView.style.display = 'block';
+        dashboardView.style.display = 'none';
+      }
+    });
+
+    // Login
+    document.getElementById('btn-login').addEventListener('click', async () => {
+      authMsg.className = 'msg';
+      try {
+        await signInWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
+      } catch (err) {
+        authMsg.className = 'msg error';
+        authMsg.innerText = err.message;
+      }
+    });
+
+    // Sign Up
+    document.getElementById('btn-signup').addEventListener('click', async () => {
+      authMsg.className = 'msg';
+      try {
+        await createUserWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
+      } catch (err) {
+        authMsg.className = 'msg error';
+        authMsg.innerText = err.message;
+      }
+    });
+
+    // Sign Out
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await signOut(auth);
+    });
+  </script>
+</body>
+</html>
