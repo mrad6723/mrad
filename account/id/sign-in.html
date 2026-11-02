@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — MRAD ID</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #0b0f17;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #161e2e;
+      border: 1px solid #283548;
+      padding: 40px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    .logo-mark {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 1.6rem;
+      text-align: center;
+      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    p.sub {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+    }
+    .field {
+      margin-bottom: 18px;
+    }
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    label {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+    .forgot-link {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      text-decoration: none;
+    }
+    .forgot-link:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+    input {
+      width: 100%;
+      background: #0b0f17;
+      border: 1px solid #334155;
+      padding: 13px 14px;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      border-color: #3b82f6;
+    }
+    .btn-submit {
+      width: 100%;
+      background: #ffffff;
+      color: #0b0f17;
+      border: none;
+      padding: 13px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .btn-submit:hover {
+      background: #e2e8f0;
+    }
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .error {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-top: 16px;
+      text-align: center;
+      display: none;
+    }
+    .footer-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .footer-note a {
+      color: #94a3b8;
+      text-decoration: none;
+    }
+    .footer-note a:hover {
+      color: #ffffff;
+    }
+    .back-home {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.8rem;
+    }
+    .back-home a {
+      color: #475569;
+      text-decoration: none;
+    }
+    .back-home a:hover {
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo-mark">🌐</div>
+    <h1>MRAD ID</h1>
+    <p class="sub">Sign in to manage your account and services</p>
+
+    <form id="signin-form">
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="name@example.com" autofocus />
+      </div>
+
+      <div class="field">
+        <div class="label-row">
+          <label for="password">Password</label>
+          <a href="/password-reset" class="forgot-link">Forgot password?</a>
+        </div>
+        <input type="password" id="password" required placeholder="••••••••" />
+      </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">Sign In</button>
+      <div class="error" id="form-error"></div>
+    </form>
+
+    <div class="footer-note">
+      Don't have an account? <a href="/sign-up">Sign Up</a>
+    </div>
+
+    <div class="back-home">
+      <a href="/">← Return to landing</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // REPLACE WITH YOUR FIREBASE CONFIG
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "id.account.mrad.co",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const form = document.getElementById("signin-form");
+    const errorEl = document.getElementById("form-error");
+    const submitBtn = document.getElementById("submit-btn");
+
+    function showError(msg) {
+      errorEl.innerText = msg;
+      errorEl.style.display = "block";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorEl.style.display = "none";
+      submitBtn.innerText = "Signing in...";
+      submitBtn.disabled = true;
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Block login if user hasn't verified their email yet
+        if (!user.emailVerified) {
+          showError("Your account registration is pending email verification. Please check your inbox.");
+          submitBtn.innerText = "Sign In";
+          submitBtn.disabled = false;
+          return;
+        }
+
+        // On successful verified login, redirect to dashboard
+        window.location.href = "/dashboard";
+      } catch (err) {
+        submitBtn.innerText = "Sign In";
+        submitBtn.disabled = false;
+
+        if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
+          showError("Invalid email or password.");
+        } else if (err.code === "auth/too-many-requests") {
+          showError("Too many failed attempts. Please try again later.");
+        } else {
+          showError("Sign in failed. Please try again.");
+        }
+      }
+    });
+  </script>
+</body>
+</html>

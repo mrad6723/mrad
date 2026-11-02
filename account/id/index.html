@@ -3,18 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MRAD ID — Customer Dashboard</title>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CSYX22RS7X"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-CSYX22RS7X');
-  </script>
-
+  <title>MRAD ID</title>
   <style>
     * {
       box-sizing: border-box;
@@ -22,235 +11,139 @@
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-
     body {
-      background-color: #0d1117;
-      color: #e6edf3;
+      background-color: #0b0f17;
+      color: #ffffff;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-
-    .container {
+    .card {
+      background: #161e2e;
+      border: 1px solid #283548;
+      padding: 40px;
+      border-radius: 12px;
       width: 100%;
       max-width: 420px;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 24px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     }
-
+    .logo-mark {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
     h1 {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       margin-bottom: 8px;
-      text-align: center;
+      font-weight: 700;
+      letter-spacing: -0.02em;
     }
-
-    p.subtitle {
-      font-size: 0.85rem;
-      color: #8b949e;
-      text-align: center;
-      margin-bottom: 20px;
+    p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-bottom: 32px;
+      line-height: 1.5;
     }
-
-    .form-group {
-      margin-bottom: 14px;
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
-
-    label {
-      display: block;
-      font-size: 0.8rem;
-      margin-bottom: 4px;
-      color: #c9d1d9;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px 12px;
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      color: #e6edf3;
-      font-size: 0.9rem;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #58a6ff;
-    }
-
     .btn {
+      display: block;
       width: 100%;
-      padding: 10px;
-      background: #238636;
-      border: 1px solid rgba(240, 246, 252, 0.1);
+      padding: 13px;
       border-radius: 6px;
-      color: #ffffff;
+      text-decoration: none;
       font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    .btn:hover {
-      background: #2ea043;
-    }
-
-    .btn-secondary {
-      background: #21262d;
-      border: 1px solid #30363d;
-      color: #c9d1d9;
-      margin-top: 8px;
-    }
-
-    .btn-secondary:hover {
-      background: #30363d;
-    }
-
-    .msg {
-      font-size: 0.8rem;
-      margin-top: 12px;
+      font-size: 1rem;
       text-align: center;
-      display: none;
+      transition: background 0.2s, color 0.2s;
     }
-
-    .msg.error {
-      display: block;
-      color: #f85149;
+    .btn-primary {
+      background: #ffffff;
+      color: #0b0f17;
     }
-
-    .msg.success {
-      display: block;
-      color: #3fb950;
+    .btn-primary:hover {
+      background: #e2e8f0;
     }
-
-    /* Logged in view */
-    #dashboard-view {
-      display: none;
+    .btn-outline {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid #334155;
     }
-
-    .user-info {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 6px;
-      padding: 12px;
-      margin-bottom: 16px;
+    .btn-outline:hover {
+      background: #1e293b;
+    }
+    #loading-state {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+    .footer-link {
+      margin-top: 28px;
       font-size: 0.85rem;
     }
-
-    .user-info div {
-      margin-bottom: 6px;
-      word-break: break-all;
+    .footer-link a {
+      color: #64748b;
+      text-decoration: none;
+    }
+    .footer-link a:hover {
+      color: #94a3b8;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- AUTH VIEW (Sign In / Register) -->
-    <div id="auth-view">
-      <h1>MRAD ID</h1>
-      <p class="subtitle">Sign in to manage your account and services</p>
-
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="name@example.com" />
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="••••••••" />
-      </div>
-
-      <button class="btn" id="btn-login">Sign In</button>
-      <button class="btn btn-secondary" id="btn-signup">Create Account</button>
-      <div id="auth-msg" class="msg"></div>
+  <div class="card">
+    <div id="loading-state">
+      Verifying session...
     </div>
 
-    <!-- DASHBOARD VIEW (Shown when authenticated) -->
-    <div id="dashboard-view">
-      <h1>Customer Dashboard</h1>
-      <p class="subtitle">Welcome to your MRAD control panel</p>
+    <div id="landing-ui" style="display: none;">
+      <div class="logo-mark">🌐</div>
+      <h1>MRAD ID</h1>
+      <p>Sign in to manage your account and services</p>
 
-      <div class="user-info">
-        <div><strong>Email:</strong> <span id="user-email">-</span></div>
-        <div><strong>User ID:</strong> <span id="user-uid">-</span></div>
+      <div class="btn-group">
+        <a href="/sign-in" class="btn btn-primary">Sign In</a>
+        <a href="/sign-up" class="btn btn-outline">Sign Up</a>
       </div>
 
-      <button class="btn btn-secondary" id="btn-logout">Sign Out</button>
+      <div class="footer-link">
+        <a href="https://www.mrad.co">← Back to mrad.co</a>
+      </div>
     </div>
   </div>
 
-  <!-- Firebase Scripts -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { 
-      getAuth, 
-      onAuthStateChanged, 
-      signInWithEmailAndPassword, 
-      createUserWithEmailAndPassword, 
-      signOut 
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+    // REPLACE WITH YOUR FIREBASE CONFIG
     const firebaseConfig = {
-      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
-      authDomain: "mrad-6-7-2-3.firebaseapp.com",
-      projectId: "mrad-6-7-2-3",
-      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
-      messagingSenderId: "898456023777",
-      appId: "1:898456023777:web:874f5511a9291e120bbda0"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "id.account.mrad.co",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const authView = document.getElementById('auth-view');
-    const dashboardView = document.getElementById('dashboard-view');
-    const authMsg = document.getElementById('auth-msg');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-
-    // Auth State Listener
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        authView.style.display = 'none';
-        dashboardView.style.display = 'block';
-        document.getElementById('user-email').innerText = user.email;
-        document.getElementById('user-uid').innerText = user.uid;
+        // Redirect to dashboard if logged in
+        window.location.href = "/dashboard";
       } else {
-        authView.style.display = 'block';
-        dashboardView.style.display = 'none';
+        // Show choice UI if not logged in
+        document.getElementById("loading-state").style.display = "none";
+        document.getElementById("landing-ui").style.display = "block";
       }
-    });
-
-    // Login
-    document.getElementById('btn-login').addEventListener('click', async () => {
-      authMsg.className = 'msg';
-      try {
-        await signInWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
-      } catch (err) {
-        authMsg.className = 'msg error';
-        authMsg.innerText = err.message;
-      }
-    });
-
-    // Sign Up
-    document.getElementById('btn-signup').addEventListener('click', async () => {
-      authMsg.className = 'msg';
-      try {
-        await createUserWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
-      } catch (err) {
-        authMsg.className = 'msg error';
-        authMsg.innerText = err.message;
-      }
-    });
-
-    // Sign Out
-    document.getElementById('btn-logout').addEventListener('click', async () => {
-      await signOut(auth);
     });
   </script>
 </body>
