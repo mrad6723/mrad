@@ -31,8 +31,8 @@
       "rewrites": [{ "source": "**", "destination": "/index.html" }]
     },
     {
-      "target": "account",
-      "public": "account",
+      "target": "domains",
+      "public": "domains",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [{ "source": "**", "destination": "/index.html" }]
     }
