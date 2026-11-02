@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account — MRAD ID</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #0b0f17;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #161e2e;
+      border: 1px solid #283548;
+      padding: 40px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 1.6rem;
+      text-align: center;
+      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    p.sub {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+    }
+    .step-indicator {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .field {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input {
+      width: 100%;
+      background: #0b0f17;
+      border: 1px solid #334155;
+      padding: 13px 14px;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      border-color: #3b82f6;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn {
+      flex: 1;
+      padding: 13px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .btn-next {
+      background: #ffffff;
+      color: #0b0f17;
+    }
+    .btn-next:hover {
+      background: #e2e8f0;
+    }
+    .btn-next:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .btn-back {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+    .btn-back:hover {
+      background: #1e293b;
+      color: #ffffff;
+    }
+    .error {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-top: 16px;
+      text-align: center;
+      display: none;
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    #success-screen {
+      display: none;
+      text-align: center;
+    }
+    #success-screen h2 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+    #success-screen p {
+      color: #94a3b8;
+      line-height: 1.6;
+      font-size: 0.92rem;
+      margin-bottom: 24px;
+    }
+    .footer-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .footer-note a {
+      color: #94a3b8;
+      text-decoration: none;
+    }
+    .footer-note a:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div id="form-container">
+      <h1>MRAD ID</h1>
+      <p class="sub">Account Registration Request</p>
+
+      <!-- Step 1: First Name & Last Name -->
+      <div class="step active" id="step-1">
+        <div class="step-indicator">Step 1 of 4: Personal Information</div>
+        <div class="field">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" placeholder="e.g. John" autofocus />
+        </div>
+        <div class="field">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" placeholder="e.g. Doe" />
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-next" onclick="nextStep(1)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Email -->
+      <div class="step" id="step-2">
+        <div class="step-indicator">Step 2 of 4: Email Address</div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="name@example.com" />
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-back" onclick="prevStep(2)">Back</button>
+          <button type="button" class="btn btn-next" onclick="nextStep(2)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Phone Number -->
+      <div class="step" id="step-3">
+        <div class="step-indicator">Step 3 of 4: Contact Number</div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" placeholder="+961 70 000 000" />
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-back" onclick="prevStep(3)">Back</button>
+          <button type="button" class="btn btn-next" onclick="nextStep(3)">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Password -->
+      <div class="step" id="step-4">
+        <div class="step-indicator">Step 4 of 4: Security</div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" />
+        </div>
+        <div class="field">
+          <label for="passwordConfirm">Confirm Password</label>
+          <input type="password" id="passwordConfirm" placeholder="••••••••" />
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-back" onclick="prevStep(4)">Back</button>
+          <button type="button" class="btn btn-next" id="submit-btn" onclick="submitRegistration()">Submit Request</button>
+        </div>
+      </div>
+
+      <div class="error" id="form-error"></div>
+
+      <div class="footer-note">
+        Already have an account? <a href="/sign-in">Sign In</a>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="success-screen">
+      <h2>Request Submitted</h2>
+      <p>Your registration request has been submitted to the MRAD administration team. Once manually approved, you will receive an email verification link to activate your access.</p>
+      <a href="/sign-in" class="btn btn-next" style="display: inline-block; text-decoration: none; width: auto; padding: 12px 24px;">Return to Sign In</a>
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz520DckHkX2m14roo9boecdSbWI7G4KYJTbPehvmR2Kfrlw8jqjyGag45BHoaVIqSQzA/exec";
+
+    const formData = {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      password: ""
+    };
+
+    const errorEl = document.getElementById("form-error");
+
+    function showError(msg) {
+      errorEl.innerText = msg;
+      errorEl.style.display = "block";
+    }
+
+    function clearError() {
+      errorEl.style.display = "none";
+    }
+
+    function nextStep(current) {
+      clearError();
+      if (current === 1) {
+        const fn = document.getElementById("firstName").value.trim();
+        const ln = document.getElementById("lastName").value.trim();
+        if (!fn || !ln) return showError("Please enter both your first and last name.");
+        formData.firstName = fn;
+        formData.lastName = ln;
+      } else if (current === 2) {
+        const em = document.getElementById("email").value.trim();
+        if (!em || !em.includes("@") || !em.includes(".")) return showError("Please enter a valid email address.");
+        formData.email = em;
+      } else if (current === 3) {
+        const ph = document.getElementById("phone").value.trim();
+        if (!ph || ph.length < 6) return showError("Please enter a valid phone number.");
+        formData.phone = ph;
+      }
+
+      document.getElementById(`step-${current}`).classList.remove("active");
+      document.getElementById(`step-${current + 1}`).classList.add("active");
+    }
+
+    function prevStep(current) {
+      clearError();
+      document.getElementById(`step-${current}`).classList.remove("active");
+      document.getElementById(`step-${current - 1}`).classList.add("active");
+    }
+
+    async function submitRegistration() {
+      clearError();
+      const p1 = document.getElementById("password").value;
+      const p2 = document.getElementById("passwordConfirm").value;
+
+      if (!p1 || p1.length < 6) return showError("Password must be at least 6 characters.");
+      if (p1 !== p2) return showError("Passwords do not match.");
+
+      formData.password = p1;
+
+      const btn = document.getElementById("submit-btn");
+      btn.innerText = "Submitting...";
+      btn.disabled = true;
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(formData)
+        });
+
+        document.getElementById("form-container").style.display = "none";
+        document.getElementById("success-screen").style.display = "block";
+      } catch (err) {
+        btn.innerText = "Submit Request";
+        btn.disabled = false;
+        showError("Submission failed. Please check your internet connection and try again.");
+      }
+    }
+  </script>
+</body>
+</html>
