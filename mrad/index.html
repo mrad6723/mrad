@@ -1,5 +1,659 @@
 <!DOCTYPE html>
-<html><body style="font-family:sans-serif;text-align:center;padding:50px;">
-  <h1>Mrad</h1>
-  <p>Coming Soon</p>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MRAD Control Center — Master Administration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #05070b;
+      --card-bg: rgba(15, 20, 32, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --accent-amber: #f59e0b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: rgba(11, 15, 25, 0.8);
+      --input-border: rgba(255, 255, 255, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-x: hidden;
+      padding: 0 24px;
+    }
+
+    .glow-blob {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(160px);
+      opacity: 0.14;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { top: -10%; left: 15%; background: radial-gradient(circle, var(--accent-cyan), transparent); }
+    .blob-2 { bottom: 0; right: 10%; background: radial-gradient(circle, var(--accent-indigo), transparent); }
+
+    /* Header Nav */
+    header {
+      position: relative;
+      z-index: 10;
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 22px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-rose), var(--accent-indigo));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(244, 63, 94, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .private-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      color: #fda4af;
+      letter-spacing: 0.05em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-action {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-action:hover {
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main Container */
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 1300px;
+      width: 100%;
+      margin: 30px auto 60px;
+    }
+
+    /* Guard / Access Denied Screen */
+    #guard-view {
+      max-width: 480px;
+      margin: 80px auto;
+      text-align: center;
+    }
+
+    .guard-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 40px 32px;
+      backdrop-filter: blur(20px);
+    }
+
+    .lock-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      color: var(--accent-rose);
+    }
+
+    .guard-card h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .guard-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+
+    .btn-auth-redirect {
+      display: inline-block;
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-indigo));
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* Dashboard Layout */
+    #admin-view {
+      display: none;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      backdrop-filter: blur(20px);
+    }
+
+    .kpi-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .kpi-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent-emerald);
+    }
+
+    /* 2-Column Split: Tickets Queue vs Quick Controls */
+    .control-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .control-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(20px);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .panel-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* Ticket Stream Items */
+    .ticket-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .ticket-item {
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+      transition: border-color 0.2s ease;
+    }
+
+    .ticket-item:hover {
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    .ticket-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+
+    .ticket-subject {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .ticket-dept {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .ticket-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .ticket-body {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      white-space: pre-wrap;
+    }
+
+    .ticket-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-resolve {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.12);
+      color: #6ee7b7;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-resolve:hover {
+      background: rgba(16, 185, 129, 0.25);
+    }
+
+    /* Management Links */
+    .link-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quick-link {
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .quick-link:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.08);
+      transform: translateX(3px);
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 10;
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+
+  <!-- Header -->
+  <header>
+    <a href="https://mrad.mrad.co" class="brand">
+      <div class="brand-mark">&#9881;</div>
+      <div class="brand-title">
+        MRAD OPS
+        <span class="private-tag">STRICT PRIVATE</span>
+      </div>
+    </a>
+    <div class="header-actions">
+      <span id="admin-user-tag" style="font-size: 0.85rem; color: var(--accent-cyan); font-family: monospace;"></span>
+      <button class="btn-action" id="btn-admin-logout" style="display: none;">Lock Console</button>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main>
+    <!-- LOCKED / AUTH SCREEN -->
+    <div id="guard-view">
+      <div class="guard-card">
+        <div class="lock-icon">&#128274;</div>
+        <h1>MRAD Master Control</h1>
+        <p>This endpoint is restricted strictly to authorized infrastructure operators. Please authenticate through your master identity account.</p>
+        <a href="https://account.mrad.co" class="btn-auth-redirect">Sign In via MRAD ID &rarr;</a>
+      </div>
+    </div>
+
+    <!-- AUTHORIZED DASHBOARD -->
+    <div id="admin-view">
+      <!-- KPI Stats -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Open Tickets</div>
+          <div class="kpi-value" id="count-open-tickets">0</div>
+          <div class="kpi-badge">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald);"></span>
+            Live Queue Sync
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Hosting Network</div>
+          <div class="kpi-value">5 Subdomains</div>
+          <div class="kpi-badge">Firebase CDN Active</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Registry Provider</div>
+          <div class="kpi-value">OpenSRS</div>
+          <div class="kpi-badge">API Reseller Mode</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-title">Identity Authority</div>
+          <div class="kpi-value">Firebase</div>
+          <div class="kpi-badge">Auth SDK 10.12</div>
+        </div>
+      </div>
+
+      <!-- Control Layout -->
+      <div class="control-grid">
+        <!-- 1. Live Support Tickets Stream -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Active Support Queue</div>
+            <button class="btn-action" id="btn-refresh-tickets">Refresh Stream</button>
+          </div>
+
+          <div id="tickets-container" class="ticket-list">
+            <div style="color: var(--text-muted); font-size: 0.9rem; padding: 20px 0;">Loading queue...</div>
+          </div>
+        </div>
+
+        <!-- 2. Master Shortcuts & External Hubs -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Infrastructure Hubs</div>
+          </div>
+
+          <div class="link-stack">
+            <a href="https://manage.opensrs.com" target="_blank" rel="noopener" class="quick-link">
+              <span>OpenSRS Reseller Manager</span>
+              <span style="color: var(--accent-cyan);">&#8599;</span>
+            </a>
+            <a href="https://console.firebase.google.com/project/mrad-6-7-2-3" target="_blank" rel="noopener" class="quick-link">
+              <span>Firebase Console</span>
+              <span style="color: var(--accent-cyan);">&#8599;</span>
+            </a>
+            <a href="https://github.com/mrad6723/mrad" target="_blank" rel="noopener" class="quick-link">
+              <span>GitHub Repository</span>
+              <span style="color: var(--accent-cyan);">&#8599;</span>
+            </a>
+            <a href="https://console.cloud.google.com/iam-admin" target="_blank" rel="noopener" class="quick-link">
+              <span>Google Cloud IAM</span>
+              <span style="color: var(--accent-cyan);">&#8599;</span>
+            </a>
+          </div>
+
+          <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+            <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 10px;">Quick Subdomain Test</div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <a href="https://mrad.co" target="_blank" class="btn-action" style="font-size: 0.78rem;">Main</a>
+              <a href="https://domains.mrad.co" target="_blank" class="btn-action" style="font-size: 0.78rem;">Domains</a>
+              <a href="https://email.mrad.co" target="_blank" class="btn-action" style="font-size: 0.78rem;">Email</a>
+              <a href="https://account.mrad.co" target="_blank" class="btn-action" style="font-size: 0.78rem;">Account</a>
+              <a href="https://support.mrad.co" target="_blank" class="btn-action" style="font-size: 0.78rem;">Support</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div>&copy; 2026 MRAD Private Operations. Strictly Confidential.</div>
+    <div>Project ID: mrad-6-7-2-3</div>
+  </footer>
+
+  <!-- Firebase Admin & Firestore Bridge -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      query, 
+      where, 
+      orderBy, 
+      onSnapshot, 
+      doc, 
+      updateDoc 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0",
+      measurementId: "G-LF2M0T76FP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Whitelisted admin emails
+    const ADMIN_EMAILS = [
+      "hsn@mrad.co"
+    ];
+
+    const guardView = document.getElementById('guard-view');
+    const adminView = document.getElementById('admin-view');
+    const adminUserTag = document.getElementById('admin-user-tag');
+    const btnLogout = document.getElementById('btn-admin-logout');
+    const ticketsContainer = document.getElementById('tickets-container');
+    const countOpenTickets = document.getElementById('count-open-tickets');
+
+    // 1. Enforce Authentication & Admin Whitelist
+    onAuthStateChanged(auth, (user) => {
+      if (user && (ADMIN_EMAILS.includes(user.email.toLowerCase()) || user.email.endsWith("@mrad.co"))) {
+        guardView.style.display = 'none';
+        adminView.style.display = 'block';
+        adminUserTag.innerText = user.email;
+        btnLogout.style.display = 'inline-block';
+
+        // Connect ticket stream
+        subscribeToTickets();
+      } else {
+        adminView.style.display = 'none';
+        guardView.style.display = 'block';
+        adminUserTag.innerText = '';
+        btnLogout.style.display = 'none';
+      }
+    });
+
+    btnLogout.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.reload();
+    });
+
+    // 2. Real-Time Ticket Stream
+    let unsubscribeTickets = null;
+
+    function subscribeToTickets() {
+      if (unsubscribeTickets) unsubscribeTickets();
+
+      const q = query(
+        collection(db, "support_tickets"),
+        where("status", "==", "open")
+      );
+
+      unsubscribeTickets = onSnapshot(q, (snapshot) => {
+        countOpenTickets.innerText = snapshot.size;
+
+        if (snapshot.empty) {
+          ticketsContainer.innerHTML = '<div style="color: var(--text-muted); font-size: 0.9rem; padding: 20px 0;">No pending support tickets. All systems clear.</div>';
+          return;
+        }
+
+        ticketsContainer.innerHTML = '';
+        snapshot.forEach((ticketDoc) => {
+          const t = ticketDoc.data();
+          const card = document.createElement('div');
+          card.className = 'ticket-item';
+          card.innerHTML = `
+            <div class="ticket-top">
+              <div class="ticket-subject">${escapeHtml(t.subject || 'No Subject')}</div>
+              <div class="ticket-dept">${escapeHtml(t.department || 'general')}</div>
+            </div>
+            <div class="ticket-meta">
+              <span><strong>From:</strong> ${escapeHtml(t.name || 'Anonymous')} (&lt;${escapeHtml(t.email || 'N/A')}&gt;)</span>
+              <span><strong>UID:</strong> ${escapeHtml(t.userId || 'guest')}</span>
+            </div>
+            <div class="ticket-body">${escapeHtml(t.details || '')}</div>
+            <div class="ticket-actions">
+              <button class="btn-resolve" data-id="${ticketDoc.id}">Mark as Resolved &#10003;</button>
+            </div>
+          `;
+          ticketsContainer.appendChild(card);
+        });
+
+        // Attach resolve click events
+        document.querySelectorAll('.btn-resolve').forEach((btn) => {
+          btn.addEventListener('click', async (e) => {
+            const ticketId = e.target.getAttribute('data-id');
+            e.target.disabled = true;
+            e.target.innerText = 'Closing...';
+            try {
+              await updateDoc(doc(db, "support_tickets", ticketId), {
+                status: "resolved"
+              });
+            } catch (err) {
+              alert('Error updating ticket: ' + err.message);
+              e.target.disabled = false;
+              e.target.innerText = 'Mark as Resolved ✓';
+            }
+          });
+        });
+      }, (err) => {
+        ticketsContainer.innerHTML = `<div style="color: var(--accent-rose); font-size: 0.88rem;">Error loading tickets: ${err.message}</div>`;
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>
