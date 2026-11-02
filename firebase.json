@@ -3,16 +3,12 @@
     {
       "site": "mrad-account-id",
       "public": "account/id",
+      "cleanUrls": true,
+      "trailingSlash": true,
       "ignore": [
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
-      ],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
       ]
     }
   ]
