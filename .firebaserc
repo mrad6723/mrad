@@ -1,0 +1,29 @@
+{
+  "projects": {
+    "default": "mrad-6-7-2-3"
+  },
+  "targets": {
+    "mrad-6-7-2-3": {
+      "hosting": {
+        "www": [
+          "mrad-6-7-2-3"
+        ],
+        "mrad": [
+          "mrad-6-7-2-3-mrad"
+        ],
+        "account": [
+          "mrad-6-7-2-3-account"
+        ],
+        "support": [
+          "mrad-6-7-2-3-support"
+        ],
+        "email": [
+          "mrad-6-7-2-3-email"
+        ],
+        "domains": [
+          "mrad-6-7-2-3-domains"
+        ]
+      }
+    }
+  }
+}

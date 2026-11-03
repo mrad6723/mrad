@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mrad Email — Enterprise Webmail & Business Inboxes</title>
+
+  <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
+
+  <!-- Global Shared Components -->
+  <script src="https://mrad.co/header.js?v=105" defer></script>
+  <script src="https://mrad.co/footer.js?v=105" defer></script>
+
+  <!-- Local Subdomain Navigations -->
+  <script src="/header-navigation.js?v=105" defer></script>
+  <script src="/footer-navigation.js?v=105" defer></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 72px 24px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #000000;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: #475569;
+      max-width: 620px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .btn-main {
+      background: #000000;
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-main:hover {
+      opacity: 0.85;
+    }
+
+    .btn-alt {
+      background: #ffffff;
+      color: #000000;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid #e2e8f0;
+      transition: background 0.15s ease;
+    }
+
+    .btn-alt:hover {
+      background: #f8fafc;
+    }
+
+    /* Email Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .feature-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 28px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.15s ease;
+    }
+
+    .feature-card:hover {
+      border-color: #000000;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 0.92rem;
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .feature-link {
+      color: #000000;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feature-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 2.1rem;
+      }
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Automatically identifies email.mrad.co and shows Mrad Email badge -->
+  <mrad-header></mrad-header>
+  <mrad-header-nav active="webmail"></mrad-header-nav>
+
+  <main class="main-content">
+    <section class="hero-section">
+      <div class="badge">Business Inboxes</div>
+      <h1 class="hero-title">Professional Email on Your Domain</h1>
+      <p class="hero-desc">Secure webmail, custom business addresses, automatic spam filtering, and enterprise encryption built on the Mrad infrastructure.</p>
+
+      <div class="btn-group">
+        <a href="/login" class="btn-main">Open Webmail</a>
+        <a href="https://account.mrad.co/id/home.html" class="btn-alt">Manage Inboxes</a>
+      </div>
+    </section>
+
+    <section class="features-grid">
+      <div class="feature-card">
+        <div>
+          <h3>Custom Domain Inboxes</h3>
+          <p>Create professional email addresses matching your brand domains (e.g. contact@yourdomain.com).</p>
+        </div>
+        <a href="https://domains.mrad.co" class="feature-link">Connect Domains &rarr;</a>
+      </div>
+
+      <div class="feature-card">
+        <div>
+          <h3>IMAP & SMTP Access</h3>
+          <p>Seamlessly integrate your inboxes with Outlook, Apple Mail, Thunderbird, or mobile email clients.</p>
+        </div>
+        <a href="https://support.mrad.co" class="feature-link">View Mail Settings &rarr;</a>
+      </div>
+
+      <div class="feature-card">
+        <div>
+          <h3>DKIM, SPF & DMARC</h3>
+          <p>Built-in deliverability protocols to guarantee your emails hit the primary inbox, not the junk folder.</p>
+        </div>
+        <a href="https://support.mrad.co" class="feature-link">Security Specs &rarr;</a>
+      </div>
+    </section>
+  </main>
+
+  <mrad-footer>
+    <mrad-footer-nav></mrad-footer-nav>
+  </mrad-footer>
+
+</body>
+</html>

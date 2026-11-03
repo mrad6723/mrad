@@ -1,0 +1,63 @@
+class MradFooterNav extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+      <div class="mrad-footer-columns">
+        <div class="mrad-col">
+          <h4>Platform</h4>
+          <a href="/">Overview</a>
+          <a href="/ecosystem">Ecosystem</a>
+          <a href="https://account.mrad.co/id/home.html">Mrad ID</a>
+        </div>
+        <div class="mrad-col">
+          <h4>Services</h4>
+          <a href="https://domains.mrad.co">Domains</a>
+          <a href="https://email.mrad.co">Email</a>
+          <a href="https://support.mrad.co">Support Desk</a>
+        </div>
+        <div class="mrad-col">
+          <h4>Company</h4>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="https://status.mrad.co">Network Status</a>
+        </div>
+      </div>
+
+      <style>
+        mrad-footer-nav {
+          display: block;
+          width: 100%;
+        }
+
+        .mrad-footer-columns {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+          gap: 32px;
+        }
+
+        .mrad-col h4 {
+          font-size: 0.88rem;
+          font-weight: 700;
+          color: #000000;
+          margin-bottom: 14px;
+        }
+
+        .mrad-col a {
+          display: block;
+          color: #64748b;
+          text-decoration: none;
+          font-size: 0.85rem;
+          margin-bottom: 10px;
+          transition: color 0.15s ease;
+        }
+
+        .mrad-col a:hover {
+          color: #000000;
+        }
+      </style>
+    `;
+  }
+}
+
+if (!customElements.get("mrad-footer-nav")) {
+  customElements.define("mrad-footer-nav", MradFooterNav);
+}

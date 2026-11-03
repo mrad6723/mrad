@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mrad ID — Dashboard</title>
+
+  <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
+
+  <!-- Global Shared Components -->
+  <script src="https://mrad.co/header.js?v=102" defer></script>
+  <script src="https://mrad.co/footer.js?v=102" defer></script>
+
+  <!-- Local Subdomain Navigations -->
+  <script src="/header-navigation.js?v=102" defer></script>
+  <script src="/footer-navigation.js?v=102" defer></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .welcome-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .welcome-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .welcome-desc {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .btn-signout {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .btn-signout:hover {
+      background: #f1f5f9;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .service-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 24px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.15s ease;
+    }
+
+    .service-card:hover {
+      border-color: #000000;
+    }
+
+    .service-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .service-link {
+      color: #000000;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .service-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <mrad-header></mrad-header>
+  <mrad-header-nav active="profile"></mrad-header-nav>
+
+  <main class="dashboard-container">
+    <div class="welcome-header">
+      <div>
+        <h1 class="welcome-title">My Account</h1>
+        <p class="welcome-desc">Manage your identity, active domains, security, and ecosystem access.</p>
+      </div>
+      <button class="btn-signout" id="signOutBtn">Sign Out</button>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div>
+          <h3>Domains</h3>
+          <p>Manage your DNS zones, active domain registrations, and nameserver routing.</p>
+        </div>
+        <a href="https://domains.mrad.co" class="service-link">Open Domains &rarr;</a>
+      </div>
+
+      <div class="service-card">
+        <div>
+          <h3>Email</h3>
+          <p>Access your business inboxes, webmail clients, and spam filtering configurations.</p>
+        </div>
+        <a href="https://email.mrad.co" class="service-link">Open Email &rarr;</a>
+      </div>
+
+      <div class="service-card">
+        <div>
+          <h3>Support Desk</h3>
+          <p>View open support requests, open new priority tickets, or chat with technical support.</p>
+        </div>
+        <a href="https://support.mrad.co" class="service-link">Open Support &rarr;</a>
+      </div>
+    </div>
+  </main>
+
+  <mrad-footer>
+    <mrad-footer-nav></mrad-footer-nav>
+  </mrad-footer>
+
+  <script>
+    // Route protection: If no session cookie is found, redirect to /id/sign-in.html
+    const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
+    if (!hasSession) {
+      window.location.replace("/id/sign-in.html");
+    }
+
+    // Sign out handler: Clears the cross-subdomain cookie across .mrad.co
+    document.getElementById("signOutBtn").addEventListener("click", function () {
+      document.cookie = "mrad_session=; path=/; domain=.mrad.co; max-age=0; SameSite=Lax; Secure";
+      window.location.href = "https://mrad.co";
+    });
+  </script>
+
+</body>
+</html>

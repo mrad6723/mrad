@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — Mrad ID</title>
+
+  <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
+
+  <!-- Global Shared Components -->
+  <script src="https://mrad.co/header.js?v=102" defer></script>
+  <script src="https://mrad.co/footer.js?v=102" defer></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 36px 32px;
+      background: #ffffff;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .auth-logo {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 12px;
+    }
+
+    .auth-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .auth-subtitle {
+      font-size: 0.88rem;
+      color: #64748b;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      font-size: 0.92rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #000000;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .form-input:focus {
+      border-color: #000000;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 44px;
+      background: #000000;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.85;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.86rem;
+      color: #64748b;
+    }
+
+    .auth-footer a {
+      color: #000000;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <mrad-header></mrad-header>
+
+  <main class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="https://mrad.co/image/logo.png" alt="Mrad" class="auth-logo" />
+        <h1 class="auth-title">Sign in to Mrad ID</h1>
+        <p class="auth-subtitle">Use your unified credentials to access all services</p>
+      </div>
+
+      <form id="signInForm">
+        <div class="form-group">
+          <label class="form-label" for="email">Email address</label>
+          <input class="form-input" type="email" id="email" required placeholder="name@example.com" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-input" type="password" id="password" required placeholder="••••••••" />
+        </div>
+
+        <button type="submit" class="btn-submit">Sign In</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have a Mrad ID? <a href="/id/sign-up.html">Sign up</a>
+      </div>
+    </div>
+  </main>
+
+  <mrad-footer></mrad-footer>
+
+  <script>
+    document.getElementById("signInForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      
+      const sessionToken = "sess_" + Math.random().toString(36).substring(2);
+      const maxAge = 60 * 60 * 24 * 30; // 30 days
+      document.cookie = "mrad_session=" + sessionToken + "; path=/; domain=.mrad.co; max-age=" + maxAge + "; SameSite=Lax; Secure";
+
+      // Redirect directly to /id/home.html
+      window.location.href = "/id/home.html";
+    });
+  </script>
+
+</body>
+</html>
