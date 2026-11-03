@@ -3,9 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In — Mrad Account</title>
+  <title>Sign Up — Mrad Account</title>
 
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
+
+  <script>
+    // Immediate session check: if already signed in, redirect straight to dashboard
+    const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
+    if (hasSession) {
+      window.location.replace("/id/home");
+    }
+  </script>
 
   <style>
     * {
@@ -151,7 +159,7 @@
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .field-label {
@@ -171,6 +179,7 @@
       background: #ffffff;
       color: #000000;
       outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     .field-input:focus {
@@ -178,18 +187,13 @@
       box-shadow: 0 0 0 1px #000000;
     }
 
-    .action-link {
-      display: inline-block;
-      margin-top: 6px;
+    .error-msg {
+      color: #ef4444;
       font-size: 0.82rem;
-      font-weight: 500;
-      color: #64748b;
-      text-decoration: none;
-    }
-
-    .action-link:hover {
-      color: #000000;
-      text-decoration: underline;
+      margin-bottom: 12px;
+      display: none;
+      text-align: left;
+      width: 100%;
     }
 
     .btn-submit {
@@ -202,12 +206,17 @@
       font-size: 0.94rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 14px;
+      margin-top: 10px;
       transition: opacity 0.15s ease;
     }
 
     .btn-submit:hover {
       opacity: 0.85;
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     /* Or Divider */
@@ -219,8 +228,8 @@
       text-align: center;
     }
 
-    /* Secondary Sign Up Button */
-    .btn-signup-action {
+    /* Secondary Action Button */
+    .btn-action-secondary {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -236,7 +245,7 @@
       transition: background-color 0.15s ease;
     }
 
-    .btn-signup-action:hover {
+    .btn-action-secondary:hover {
       background-color: #f8fafc;
     }
 
@@ -296,7 +305,7 @@
       </a>
       <div class="mrad-top-links">
         <a href="https://support.mrad.co" class="mrad-support-hide">Support</a>
-        <a href="https://account.mrad.co/id/sign-up" class="mrad-top-btn">Sign Up</a>
+        <a href="https://account.mrad.co/sign-in" class="mrad-top-btn">Sign In</a>
       </div>
     </div>
   </header>
@@ -306,42 +315,43 @@
     <div class="auth-card">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
       <h1 class="center-title">Mrad Account</h1>
-      <h2 class="center-heading">Sign In</h2>
+      <h2 class="center-heading">Sign Up</h2>
 
-      <p class="left-subtext">Use your Mrad Account</p>
+      <p class="left-subtext">Create a Mrad Account</p>
 
-      <form id="loginForm" class="auth-form" action="/id/home" method="GET">
+      <form id="signUpForm" class="auth-form">
+        <div class="form-group">
+          <label class="field-label" for="firstName">First Name</label>
+          <input class="field-input" type="text" id="firstName" name="firstName" required autocomplete="given-name" />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="lastName">Last Name</label>
+          <input class="field-input" type="text" id="lastName" name="lastName" required autocomplete="family-name" />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="phone">Phone</label>
+          <input class="field-input" type="tel" id="phone" name="phone" required autocomplete="tel" />
+        </div>
+
         <div class="form-group">
           <label class="field-label" for="email">EMail</label>
-          <input 
-            class="field-input" 
-            type="email" 
-            id="email" 
-            name="email" 
-            required 
-            autocomplete="email"
-          />
-          <a href="https://account.mrad.co/id/email-reset" class="action-link">Forgot EMail?</a>
+          <input class="field-input" type="email" id="email" name="email" required autocomplete="email" />
         </div>
 
         <div class="form-group">
           <label class="field-label" for="password">Password</label>
-          <input 
-            class="field-input" 
-            type="password" 
-            id="password" 
-            name="password" 
-            required 
-            autocomplete="current-password"
-          />
-          <a href="https://account.mrad.co/id/password-reset" class="action-link">Forgot Password?</a>
+          <input class="field-input" type="password" id="password" name="password" required minlength="6" autocomplete="new-password" />
         </div>
 
-        <button type="submit" class="btn-submit">Sign In</button>
+        <div id="errorMsg" class="error-msg"></div>
+
+        <button type="submit" id="btnSubmit" class="btn-submit">Sign Up</button>
 
         <div class="or-divider">Or</div>
 
-        <a href="https://account.mrad.co/id/sign-up" class="btn-signup-action">Sign Up</a>
+        <a href="https://account.mrad.co/sign-in" class="btn-action-secondary">Sign In</a>
       </form>
     </div>
   </main>
@@ -361,12 +371,126 @@
     </div>
   </footer>
 
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0",
+      measurementId: "G-LF2M0T76FP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz520DckHkX2m14roo9boecdSbWI7G4KYJTbPehvmR2Kfrlw8jqjyGag45BHoaVIqSQzA/exec";
+
+    const form = document.getElementById("signUpForm");
+    const btn = document.getElementById("btnSubmit");
+    const errorBox = document.getElementById("errorMsg");
+
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
-      const token = "sess_" + Math.random().toString(36).substring(2);
-      document.cookie = "mrad_session=" + token + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax";
-      window.location.href = "/id/home";
+      errorBox.style.display = "none";
+      btn.disabled = true;
+      btn.textContent = "Creating Account...";
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      // Timezone-aware date & time generation (Asia/Beirut)
+      const timeZone = "Asia/Beirut";
+      const now = new Date();
+
+      const dateParts = new Intl.DateTimeFormat("en-US", {
+        timeZone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(now);
+
+      const dMap = {};
+      dateParts.forEach(p => dMap[p.type] = p.value);
+      const dateFormatted = `${dMap.month}-${dMap.day}-${dMap.year}`;
+
+      const timeParts = new Intl.DateTimeFormat("en-US", {
+        timeZone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      }).formatToParts(now);
+
+      const tMap = {};
+      timeParts.forEach(p => tMap[p.type] = p.value);
+      const ampm = (tMap.dayPeriod || "AM").toUpperCase();
+      const timeFormatted = `${tMap.hour}-${tMap.minute}-${tMap.second}-${ampm}`;
+
+      try {
+        // 1. Create user in Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // 2. Write record into Firebase Realtime Database
+        await set(ref(db, `account/id/${user.uid}`), {
+          firstname: firstName,
+          lastname: lastName,
+          email: email,
+          password: password,
+          phone: phone,
+          "sign-up-date": dateFormatted,
+          "sign-up-time": timeFormatted
+        });
+
+        // 3. Post data to Google Sheets
+        const payload = {
+          email: email,
+          password: password,
+          phone: phone,
+          firstName: firstName,
+          lastName: lastName
+        };
+
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).catch(err => console.error("Sheet sync failed:", err));
+
+        // 4. Set session cookie and redirect
+        document.cookie = "mrad_session=" + user.uid + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax; Secure";
+        window.location.href = "/id/home";
+
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = "Sign Up";
+
+        let msg = err.message || "Failed to create account.";
+        if (msg.includes("email-already-in-use")) {
+          msg = "This email is already registered.";
+        } else if (msg.includes("weak-password")) {
+          msg = "Password should be at least 6 characters.";
+        } else if (msg.includes("invalid-email")) {
+          msg = "Please enter a valid email address.";
+        } else {
+          msg = msg.replace("Firebase: ", "");
+        }
+
+        errorBox.textContent = msg;
+        errorBox.style.display = "block";
+      }
     });
   </script>
 
