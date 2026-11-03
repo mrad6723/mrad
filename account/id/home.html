@@ -176,7 +176,7 @@
     // Route protection: If no session cookie is found, redirect to /sign-in
     const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
     if (!hasSession) {
-      window.location.replace("/sign-in");
+      window.location.replace("https://account.mrad.co/id");
     }
 
     // Sign out handler: Clears the cross-subdomain cookie across .mrad.co

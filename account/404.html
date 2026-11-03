@@ -265,7 +265,17 @@
     }
   </style>
 
-  <script>
+<script>
+    // Route guard: unauthorized access to any /id/* route redirects to /id
+    (function() {
+      var p = window.location.pathname.replace(/\.html$/, "");
+      if (p.startsWith("/id/") || p === "/id") {
+        var hasSession = document.cookie.split("; ").some(function(c) { return c.startsWith("mrad_session="); });
+        if (!hasSession && p !== "/id") {
+          window.location.replace("https://account.mrad.co/id");
+        }
+      }
+    })();
     class MradHeaderUniversal extends HTMLElement {
       connectedCallback() {
         const host = window.location.hostname.toLowerCase();
