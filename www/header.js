@@ -42,7 +42,7 @@ class MradHeader extends HTMLElement {
       <header class="mrad-global-bar">
         <div class="mrad-global-container">
           
-          <a href="https://mrad.co" class="mrad-global-brand">
+          <a href="/" class="mrad-global-brand">
             <img 
               src="https://mrad.co/image/logo.png" 
               alt="Mrad" 
