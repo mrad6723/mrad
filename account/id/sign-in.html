@@ -3,13 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign In — Mrad ID</title>
+  <title>Sign In — Mrad Account</title>
 
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
   <!-- Global Shared Components -->
-  <script src="https://mrad.co/header.js?v=102" defer></script>
-  <script src="https://mrad.co/footer.js?v=102" defer></script>
+  <script src="https://mrad.co/header.js?v=108" defer></script>
+  <script src="https://mrad.co/footer.js?v=108" defer></script>
+
+  <script>
+    // Immediate session check: if already signed in, redirect straight to dashboard
+    const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
+    if (hasSession) {
+      window.location.replace("/id/home");
+    }
+  </script>
 
   <style>
     * {
@@ -32,102 +40,113 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 60px 20px;
+      padding: 40px 20px;
     }
 
     .auth-card {
       width: 100%;
-      max-width: 420px;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 36px 32px;
-      background: #ffffff;
-    }
-
-    .auth-header {
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
-      margin-bottom: 28px;
     }
 
     .auth-logo {
-      width: 36px;
-      height: 36px;
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      display: block;
       margin-bottom: 12px;
     }
 
-    .auth-title {
+    .auth-brand {
       font-size: 1.5rem;
-      font-weight: 700;
+      font-weight: 800;
+      color: #000000;
       letter-spacing: -0.02em;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
-    .auth-subtitle {
+    .auth-action-heading {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #000000;
+      margin-bottom: 4px;
+    }
+
+    .auth-subtext {
       font-size: 0.88rem;
       color: #64748b;
+      margin-bottom: 24px;
+    }
+
+    .auth-form {
+      width: 100%;
+      text-align: left;
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
-    .form-label {
+    .input-label {
       display: block;
       font-size: 0.84rem;
       font-weight: 600;
       margin-bottom: 6px;
+      color: #000000;
     }
 
     .form-input {
       width: 100%;
-      height: 42px;
-      padding: 0 12px;
+      height: 44px;
+      padding: 0 14px;
       font-size: 0.92rem;
       border: 1px solid #cbd5e1;
-      border-radius: 6px;
+      border-radius: 8px;
       background: #ffffff;
       color: #000000;
       outline: none;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
     .form-input:focus {
       border-color: #000000;
+      box-shadow: 0 0 0 1px #000000;
+    }
+
+    .help-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .help-link:hover {
+      color: #000000;
+      text-decoration: underline;
     }
 
     .btn-submit {
       width: 100%;
-      height: 44px;
+      height: 46px;
       background: #000000;
       color: #ffffff;
       border: none;
-      border-radius: 6px;
-      font-size: 0.92rem;
+      border-radius: 8px;
+      font-size: 0.94rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 14px;
       transition: opacity 0.15s ease;
     }
 
     .btn-submit:hover {
       opacity: 0.85;
-    }
-
-    .auth-footer {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 0.86rem;
-      color: #64748b;
-    }
-
-    .auth-footer a {
-      color: #000000;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .auth-footer a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
@@ -137,29 +156,40 @@
 
   <main class="auth-container">
     <div class="auth-card">
-      <div class="auth-header">
-        <img src="https://mrad.co/image/logo.png" alt="Mrad" class="auth-logo" />
-        <h1 class="auth-title">Sign in to Mrad ID</h1>
-        <p class="auth-subtitle">Use your unified credentials to access all services</p>
-      </div>
+      <img src="https://mrad.co/image/logo.png" alt="Mrad" class="auth-logo" />
+      <h1 class="auth-brand">Mrad Account</h1>
+      <h2 class="auth-action-heading">Sign In</h2>
+      <p class="auth-subtext">Use your Mrad Account</p>
 
-      <form id="signInForm">
+      <form id="signInForm" class="auth-form">
         <div class="form-group">
-          <label class="form-label" for="email">Email address</label>
-          <input class="form-input" type="email" id="email" required placeholder="name@example.com" />
+          <label class="input-label" for="email">EMail</label>
+          <input 
+            class="form-input" 
+            type="email" 
+            id="email" 
+            name="email" 
+            required 
+            autocomplete="email"
+          />
+          <a href="https://account.mrad.co/id/email-reset" class="help-link">Forgot EMail?</a>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="password">Password</label>
-          <input class="form-input" type="password" id="password" required placeholder="••••••••" />
+          <label class="input-label" for="password">Password</label>
+          <input 
+            class="form-input" 
+            type="password" 
+            id="password" 
+            name="password" 
+            required 
+            autocomplete="current-password"
+          />
+          <a href="https://account.mrad.co/id/password-reset" class="help-link">Forgot Password?</a>
         </div>
 
         <button type="submit" class="btn-submit">Sign In</button>
       </form>
-
-      <div class="auth-footer">
-        Don't have a Mrad ID? <a href="/id/sign-up.html">Sign up</a>
-      </div>
     </div>
   </main>
 
@@ -168,13 +198,14 @@
   <script>
     document.getElementById("signInForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      
+
+      // Set session cookie scoped across all .mrad.co subdomains (30 days)
       const sessionToken = "sess_" + Math.random().toString(36).substring(2);
-      const maxAge = 60 * 60 * 24 * 30; // 30 days
+      const maxAge = 60 * 60 * 24 * 30;
       document.cookie = "mrad_session=" + sessionToken + "; path=/; domain=.mrad.co; max-age=" + maxAge + "; SameSite=Lax; Secure";
 
-      // Redirect directly to /id/home.html
-      window.location.href = "/id/home.html";
+      // Direct to main dashboard
+      window.location.href = "/id/home";
     });
   </script>
 
