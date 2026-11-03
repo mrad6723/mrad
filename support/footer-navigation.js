@@ -13,11 +13,11 @@ class MradFooterNav extends HTMLElement {
           <h4>Ecosystem Services</h4>
           <a href="https://domains.mrad.co">Domains Portal</a>
           <a href="https://email.mrad.co">Enterprise Email</a>
-          <a href="https://account.mrad.co/id/home.html">Mrad ID Account</a>
+          <a href="https://account.mrad.co/id/home">Mrad ID Account</a>
         </div>
         <div class="mrad-col">
           <h4>Company</h4>
-          <a href="https://mrad.co">Mrad Home</a>
+          <a href="https://support.mrad.co">Mrad Home</a>
           <a href="https://mrad.co/privacy">Privacy Policy</a>
           <a href="https://mrad.co/terms">Terms of Service</a>
         </div>

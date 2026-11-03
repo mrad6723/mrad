@@ -31,11 +31,11 @@ class MradHeader extends HTMLElement {
 
     const authActions = isLoggedIn
       ? `
-        <a href="https://account.mrad.co/id/home.html" class="mrad-btn-account">My Account</a>
+        <a href="https://account.mrad.co/id/home" class="mrad-btn-account">My Account</a>
       `
       : `
-        <a href="https://account.mrad.co/id/sign-in.html" class="mrad-btn-auth">Sign In</a>
-        <a href="https://account.mrad.co/id/sign-up.html" class="mrad-btn-auth">Sign Up</a>
+        <a href="https://account.mrad.co/sign-in" class="mrad-btn-auth">Sign In</a>
+        <a href="https://account.mrad.co/sign-up" class="mrad-btn-auth">Sign Up</a>
       `;
 
     this.innerHTML = `
