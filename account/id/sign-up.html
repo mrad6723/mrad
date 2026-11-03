@@ -8,6 +8,7 @@
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
   <script>
+    // Immediate session check: if already signed in, redirect straight to dashboard
     const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
     if (hasSession) {
       window.location.replace("/id/home");
@@ -218,6 +219,7 @@
       cursor: not-allowed;
     }
 
+    /* Or Divider */
     .or-divider {
       margin: 16px 0;
       font-size: 0.88rem;
@@ -226,6 +228,7 @@
       text-align: center;
     }
 
+    /* Secondary Action Button */
     .btn-action-secondary {
       display: flex;
       align-items: center;
@@ -246,6 +249,7 @@
       background-color: #f8fafc;
     }
 
+    /* Bottom Footer */
     .mrad-bottom-footer {
       width: 100%;
       border-top: 1px solid #f1f5f9;
@@ -292,6 +296,7 @@
 </head>
 <body>
 
+  <!-- Header -->
   <header class="mrad-top-header">
     <div class="mrad-top-inner">
       <a href="https://mrad.co" class="mrad-top-brand">
@@ -305,6 +310,7 @@
     </div>
   </header>
 
+  <!-- Center Content -->
   <main class="main-wrap">
     <div class="auth-card">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
@@ -350,6 +356,7 @@
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="mrad-bottom-footer">
     <div class="mrad-bottom-inner">
       <div class="mrad-bottom-brand">
@@ -369,14 +376,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // 1. Paste your Firebase project configuration here:
     const firebaseConfig = {
-      apiKey: "YOUR_FIREBASE_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0",
+      measurementId: "G-LF2M0T76FP"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -401,11 +409,11 @@
       const phone = document.getElementById("phone").value.trim();
 
       try {
-        // Step 1: Create real user inside Firebase Authentication
+        // 1. Create real user account in Firebase Authentication
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Step 2: Post row data to Google Sheets
+        // 2. Transmit details to your Google Sheets webhook
         const payload = {
           email: email,
           password: password,
@@ -419,16 +427,30 @@
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
-        }).catch(err => console.error("Sheet log failed:", err));
+        }).catch(err => console.error("Sheets log failed:", err));
 
-        // Step 3: Set cookie with real Firebase UID and redirect
+        // 3. Set cross-subdomain session cookie using the Firebase UID
         document.cookie = "mrad_session=" + user.uid + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax; Secure";
+
+        // 4. Navigate to dashboard
         window.location.href = "/id/home";
 
       } catch (err) {
         btn.disabled = false;
         btn.textContent = "Sign Up";
-        errorBox.textContent = err.message.replace("Firebase: ", "");
+        
+        let msg = err.message || "Failed to create account.";
+        if (msg.includes("email-already-in-use")) {
+          msg = "This email is already registered.";
+        } else if (msg.includes("weak-password")) {
+          msg = "Password should be at least 6 characters.";
+        } else if (msg.includes("invalid-email")) {
+          msg = "Please enter a valid email address.";
+        } else {
+          msg = msg.replace("Firebase: ", "");
+        }
+
+        errorBox.textContent = msg;
         errorBox.style.display = "block";
       }
     });
