@@ -16,7 +16,7 @@ class MradFooterNav extends HTMLElement {
         </div>
         <div class="mrad-col">
           <h4>Ecosystem</h4>
-          <a href="https://mrad.co">Mrad Home</a>
+          <a href="/">Mrad Home</a>
           <a href="https://status.mrad.co">System Status</a>
           <a href="https://mrad.co/privacy">Privacy Policy</a>
         </div>
