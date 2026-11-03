@@ -97,7 +97,7 @@
       font-weight: 600;
     }
 
-    /* Main Form Container */
+    /* Main Container */
     .main-wrap {
       flex: 1;
       display: flex;
@@ -126,16 +126,16 @@
       font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      margin-bottom: 24px;
+      margin-bottom: 6px;
       text-align: center;
     }
 
-    .left-heading {
-      width: 100%;
-      text-align: left;
+    .center-heading {
       font-size: 1.25rem;
       font-weight: 700;
-      margin-bottom: 6px;
+      color: #000000;
+      margin-bottom: 24px;
+      text-align: center;
     }
 
     .left-subtext {
@@ -143,7 +143,7 @@
       text-align: left;
       font-size: 0.9rem;
       color: #64748b;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
 
     .auth-form {
@@ -276,8 +276,8 @@
     <div class="auth-card">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
       <h1 class="center-title">Mrad Account</h1>
+      <h2 class="center-heading">Sign In</h2>
 
-      <h2 class="left-heading">Sign In</h2>
       <p class="left-subtext">Use your Mrad Account</p>
 
       <form id="loginForm" class="auth-form" action="/id/home" method="GET">
@@ -330,7 +330,6 @@
   <script>
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      // Set session cookie for the ecosystem
       const token = "sess_" + Math.random().toString(36).substring(2);
       document.cookie = "mrad_session=" + token + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax";
       window.location.href = "/id/home";
