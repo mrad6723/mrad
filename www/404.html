@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title id="pageTitle">404 — Page Not Found | Mrad</title>
 
+  <script>
+    (function() {
+      var p = window.location.pathname.replace(/\.html$/, "");
+      if (p.startsWith("/id/") || p === "/id") {
+        var hasSession = document.cookie.split("; ").some(function(c) { return c.startsWith("mrad_session="); });
+        if (!hasSession && p !== "/id") {
+          window.location.replace("https://account.mrad.co/id");
+        }
+      }
+    })();
+  </script>
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
   <!-- Local Subdomain Navigations -->
