@@ -205,6 +205,11 @@
       opacity: 0.85;
     }
 
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     /* Or Divider */
     .or-divider {
       margin: 16px 0;
@@ -305,7 +310,7 @@
 
       <p class="left-subtext">Create a Mrad Account</p>
 
-      <form id="signUpForm" class="auth-form" onsubmit="event.preventDefault();">
+      <form id="signUpForm" class="auth-form">
         <div class="form-group">
           <label class="field-label" for="firstName">First Name</label>
           <input 
@@ -366,7 +371,7 @@
           />
         </div>
 
-        <button type="submit" class="btn-submit">Sign Up</button>
+        <button type="submit" id="btnSubmit" class="btn-submit">Sign Up</button>
 
         <div class="or-divider">Or</div>
 
@@ -389,6 +394,45 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz520DckHkX2m14roo9boecdSbWI7G4KYJTbPehvmR2Kfrlw8jqjyGag45BHoaVIqSQzA/exec";
+
+    document.getElementById("signUpForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const btn = document.getElementById("btnSubmit");
+      btn.disabled = true;
+      btn.textContent = "Creating Account...";
+
+      const payload = {
+        firstName: document.getElementById("firstName").value.trim(),
+        lastName: document.getElementById("lastName").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        // Scoped authentication cookie for all .mrad.co domains (30 days)
+        const token = "sess_" + Math.random().toString(36).substring(2);
+        document.cookie = "mrad_session=" + token + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax; Secure";
+        window.location.href = "/id/home";
+      })
+      .catch((err) => {
+        console.error("Error submitting sign-up:", err);
+        btn.disabled = false;
+        btn.textContent = "Sign Up";
+        alert("An error occurred. Please try again.");
+      });
+    });
+  </script>
 
 </body>
 </html>
