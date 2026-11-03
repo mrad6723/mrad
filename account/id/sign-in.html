@@ -8,8 +8,8 @@
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
   <!-- Global Shared Components -->
-  <script src="https://mrad.co/header.js?v=108" defer></script>
-  <script src="https://mrad.co/footer.js?v=108" defer></script>
+  <script src="https://mrad.co/header.js?v=109" defer></script>
+  <script src="https://mrad.co/footer.js?v=109" defer></script>
 
   <script>
     // Immediate session check: if already signed in, redirect straight to dashboard
@@ -49,7 +49,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: center;
     }
 
     .auth-logo {
@@ -65,18 +64,23 @@
       font-weight: 800;
       color: #000000;
       letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
     .auth-action-heading {
-      font-size: 1.15rem;
+      width: 100%;
+      text-align: left;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #000000;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
 
-    .auth-subtext {
-      font-size: 0.88rem;
+    .auth-subtext-left {
+      width: 100%;
+      text-align: left;
+      font-size: 0.9rem;
       color: #64748b;
       margin-bottom: 24px;
     }
@@ -87,7 +91,7 @@
     }
 
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .input-label {
@@ -156,58 +160,4 @@
 
   <main class="auth-container">
     <div class="auth-card">
-      <img src="https://mrad.co/image/logo.png" alt="Mrad" class="auth-logo" />
-      <h1 class="auth-brand">Mrad Account</h1>
-      <h2 class="auth-action-heading">Sign In</h2>
-      <p class="auth-subtext">Use your Mrad Account</p>
-
-      <form id="signInForm" class="auth-form">
-        <div class="form-group">
-          <label class="input-label" for="email">EMail</label>
-          <input 
-            class="form-input" 
-            type="email" 
-            id="email" 
-            name="email" 
-            required 
-            autocomplete="email"
-          />
-          <a href="https://account.mrad.co/id/email-reset" class="help-link">Forgot EMail?</a>
-        </div>
-
-        <div class="form-group">
-          <label class="input-label" for="password">Password</label>
-          <input 
-            class="form-input" 
-            type="password" 
-            id="password" 
-            name="password" 
-            required 
-            autocomplete="current-password"
-          />
-          <a href="https://account.mrad.co/id/password-reset" class="help-link">Forgot Password?</a>
-        </div>
-
-        <button type="submit" class="btn-submit">Sign In</button>
-      </form>
-    </div>
-  </main>
-
-  <mrad-footer></mrad-footer>
-
-  <script>
-    document.getElementById("signInForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      // Set session cookie scoped across all .mrad.co subdomains (30 days)
-      const sessionToken = "sess_" + Math.random().toString(36).substring(2);
-      const maxAge = 60 * 60 * 24 * 30;
-      document.cookie = "mrad_session=" + sessionToken + "; path=/; domain=.mrad.co; max-age=" + maxAge + "; SameSite=Lax; Secure";
-
-      // Direct to main dashboard
-      window.location.href = "/id/home";
-    });
-  </script>
-
-</body>
-</html>
+      <img src="
