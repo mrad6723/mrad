@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up — Mrad ID</title>
+  <title>Create Account — Mrad Account</title>
 
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
-  <!-- Global Shared Components -->
-  <script src="https://mrad.co/header.js?v=102" defer></script>
-  <script src="https://mrad.co/footer.js?v=102" defer></script>
+  <script>
+    // Immediate session check: if already signed in, redirect straight to dashboard
+    const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
+    if (hasSession) {
+      window.location.replace("/id/home");
+    }
+  </script>
 
   <style>
     * {
@@ -27,82 +31,163 @@
       flex-direction: column;
     }
 
-    .auth-container {
+    /* Top Global Header */
+    .mrad-top-header {
+      width: 100%;
+      height: 56px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .mrad-top-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mrad-top-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #000000;
+    }
+
+    .mrad-top-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .mrad-top-name {
+      font-size: 1.18rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mrad-badge {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 5px;
+      text-transform: uppercase;
+    }
+
+    .mrad-top-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mrad-top-links a {
+      color: #000000;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .mrad-top-btn {
+      padding: 6px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    .main-wrap {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 60px 20px;
+      padding: 40px 20px;
     }
 
     .auth-card {
       width: 100%;
-      max-width: 440px;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 36px 32px;
-      background: #ffffff;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .auth-header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .auth-logo {
-      width: 36px;
-      height: 36px;
+    .center-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      display: block;
       margin-bottom: 12px;
     }
 
-    .auth-title {
+    .center-title {
       font-size: 1.5rem;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: -0.02em;
-      margin-bottom: 6px;
+      margin-bottom: 24px;
+      text-align: center;
     }
 
-    .auth-subtitle {
-      font-size: 0.88rem;
+    .left-subtext {
+      width: 100%;
+      text-align: left;
+      font-size: 0.95rem;
+      font-weight: 600;
       color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .auth-form {
+      width: 100%;
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
-    .form-label {
+    .field-label {
       display: block;
       font-size: 0.84rem;
       font-weight: 600;
       margin-bottom: 6px;
     }
 
-    .form-input {
+    .field-input {
       width: 100%;
-      height: 42px;
-      padding: 0 12px;
+      height: 44px;
+      padding: 0 14px;
       font-size: 0.92rem;
       border: 1px solid #cbd5e1;
-      border-radius: 6px;
+      border-radius: 8px;
       background: #ffffff;
       color: #000000;
       outline: none;
-      transition: border-color 0.15s ease;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .form-input:focus {
+    .field-input:focus {
       border-color: #000000;
+      box-shadow: 0 0 0 1px #000000;
     }
 
     .btn-submit {
       width: 100%;
-      height: 44px;
+      height: 46px;
       background: #000000;
       color: #ffffff;
       border: none;
-      border-radius: 6px;
-      font-size: 0.92rem;
+      border-radius: 8px;
+      font-size: 0.94rem;
       font-weight: 600;
       cursor: pointer;
       margin-top: 10px;
@@ -113,75 +198,155 @@
       opacity: 0.85;
     }
 
-    .auth-footer {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 0.86rem;
+    /* Bottom Footer */
+    .mrad-bottom-footer {
+      width: 100%;
+      border-top: 1px solid #f1f5f9;
+      padding: 20px 0;
+      margin-top: auto;
+    }
+
+    .mrad-bottom-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.85rem;
       color: #64748b;
     }
 
-    .auth-footer a {
-      color: #000000;
-      font-weight: 600;
+    .mrad-bottom-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mrad-bottom-legal {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .mrad-bottom-legal a {
+      color: #64748b;
       text-decoration: none;
     }
 
-    .auth-footer a:hover {
-      text-decoration: underline;
+    @media (max-width: 480px) {
+      .mrad-support-hide {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
 
-  <mrad-header></mrad-header>
+  <!-- Header -->
+  <header class="mrad-top-header">
+    <div class="mrad-top-inner">
+      <a href="https://mrad.co" class="mrad-top-brand">
+        <img src="https://mrad.co/image/logo.png" alt="Mrad" class="mrad-top-logo" onerror="this.style.display='none'" />
+        <span class="mrad-top-name">Mrad <span class="mrad-badge">Account</span></span>
+      </a>
+      <div class="mrad-top-links">
+        <a href="https://support.mrad.co" class="mrad-support-hide">Support</a>
+        <a href="https://account.mrad.co/id/sign-in" class="mrad-top-btn">Sign In</a>
+      </div>
+    </div>
+  </header>
 
-  <main class="auth-container">
+  <!-- Center Content -->
+  <main class="main-wrap">
     <div class="auth-card">
-      <div class="auth-header">
-        <img src="https://mrad.co/image/logo.png" alt="Mrad" class="auth-logo" />
-        <h1 class="auth-title">Create your Mrad ID</h1>
-        <p class="auth-subtitle">One account for domains, email, and support</p>
-      </div>
+      <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
+      <h1 class="center-title">Mrad Account</h1>
 
-      <form id="signUpForm">
+      <p class="left-subtext">Create a Mrad Account</p>
+
+      <form id="signUpForm" class="auth-form" onsubmit="event.preventDefault();">
         <div class="form-group">
-          <label class="form-label" for="fullname">Full name</label>
-          <input class="form-input" type="text" id="fullname" required placeholder="John Doe" />
+          <label class="field-label" for="email">EMail</label>
+          <input 
+            class="field-input" 
+            type="email" 
+            id="email" 
+            name="email" 
+            required 
+            autocomplete="email"
+          />
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="email">Email address</label>
-          <input class="form-input" type="email" id="email" required placeholder="name@example.com" />
+          <label class="field-label" for="password">Password</label>
+          <input 
+            class="field-input" 
+            type="password" 
+            id="password" 
+            name="password" 
+            required 
+            autocomplete="new-password"
+          />
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="password">Create password</label>
-          <input class="form-input" type="password" id="password" required placeholder="At least 8 characters" minlength="8" />
+          <label class="field-label" for="phone">Phone</label>
+          <input 
+            class="field-input" 
+            type="tel" 
+            id="phone" 
+            name="phone" 
+            required 
+            autocomplete="tel"
+          />
         </div>
 
-        <button type="submit" class="btn-submit">Create Account</button>
+        <div class="form-group">
+          <label class="field-label" for="firstName">First Name</label>
+          <input 
+            class="field-input" 
+            type="text" 
+            id="firstName" 
+            name="firstName" 
+            required 
+            autocomplete="given-name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="lastName">Last Name</label>
+          <input 
+            class="field-input" 
+            type="text" 
+            id="lastName" 
+            name="lastName" 
+            required 
+            autocomplete="family-name"
+          />
+        </div>
+
+        <button type="submit" class="btn-submit">Sign Up</button>
       </form>
-
-      <div class="auth-footer">
-        Already have a Mrad ID? <a href="/id/sign-in.html">Sign in</a>
-      </div>
     </div>
   </main>
 
-  <mrad-footer></mrad-footer>
-
-  <script>
-    document.getElementById("signUpForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const sessionToken = "sess_" + Math.random().toString(36).substring(2);
-      const maxAge = 60 * 60 * 24 * 30; // 30 days
-      document.cookie = "mrad_session=" + sessionToken + "; path=/; domain=.mrad.co; max-age=" + maxAge + "; SameSite=Lax; Secure";
-
-      // Redirect directly to /id/home.html
-      window.location.href = "/id/home.html";
-    });
-  </script>
+  <!-- Footer -->
+  <footer class="mrad-bottom-footer">
+    <div class="mrad-bottom-inner">
+      <div class="mrad-bottom-brand">
+        <img src="https://mrad.co/image/logo.png" alt="Mrad" style="width:20px;height:20px;object-fit:contain;" onerror="this.style.display='none'" />
+        <span>&copy; 2026 Mrad. All rights reserved.</span>[span_0](start_span)[span_0](end_span)
+      </div>
+      <div class="mrad-bottom-legal">
+        <a href="https://mrad.co/privacy">Privacy</a>
+        <a href="https://mrad.co/terms">Terms</a>
+        <a href="https://status.mrad.co">System Status</a>
+      </div>
+    </div>
+  </footer>
 
 </body>
 </html>
