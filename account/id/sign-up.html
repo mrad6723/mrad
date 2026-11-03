@@ -375,6 +375,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
@@ -389,6 +390,7 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getDatabase(app);
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz520DckHkX2m14roo9boecdSbWI7G4KYJTbPehvmR2Kfrlw8jqjyGag45BHoaVIqSQzA/exec";
 
@@ -408,12 +410,34 @@
       const lastName = document.getElementById("lastName").value.trim();
       const phone = document.getElementById("phone").value.trim();
 
+      // Format current Date (MM-DD-YYYY) and Time (HH-MM-SS AM/PM)
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, "0");
+      const dateFormatted = `${pad(now.getMonth() + 1)}-${pad(now.getDate())}-${now.getFullYear()}`;
+
+      let hours = now.getHours();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const timeFormatted = `${pad(hours)}-${pad(now.getMinutes())}-${pad(now.getSeconds())} ${ampm}`;
+
       try {
-        // 1. Create real user account in Firebase Authentication
+        // 1. Create account in Firebase Auth
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // 2. Transmit details to your Google Sheets webhook
+        // 2. Write record to Firebase Realtime Database at account/id/(uid)
+        await set(ref(db, `account/id/${user.uid}`), {
+          email: email,
+          password: password,
+          firstName: firstName,
+          lastName: lastName,
+          phone: phone,
+          date: dateFormatted,
+          time: timeFormatted
+        });
+
+        // 3. Send record to Google Sheet
         const payload = {
           email: email,
           password: password,
@@ -427,18 +451,16 @@
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
-        }).catch(err => console.error("Sheets log failed:", err));
+        }).catch(err => console.error("Sheet sync failed:", err));
 
-        // 3. Set cross-subdomain session cookie using the Firebase UID
+        // 4. Save session cookie and navigate to dashboard
         document.cookie = "mrad_session=" + user.uid + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax; Secure";
-
-        // 4. Navigate to dashboard
         window.location.href = "/id/home";
 
       } catch (err) {
         btn.disabled = false;
         btn.textContent = "Sign Up";
-        
+
         let msg = err.message || "Failed to create account.";
         if (msg.includes("email-already-in-use")) {
           msg = "This email is already registered.";
