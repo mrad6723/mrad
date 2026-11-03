@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title id="pageTitle">404 — Page Not Found | Mrad</title>
 
+  <script>
+    (function() {
+      var p = window.location.pathname.replace(/\.html$/, "");
+      if (p.startsWith("/id/") || p === "/id") {
+        var hasSession = document.cookie.split("; ").some(function(c) { return c.startsWith("mrad_session="); });
+        if (!hasSession && p !== "/id") {
+          window.location.replace("https://account.mrad.co/id");
+        }
+      }
+    })();
+  </script>
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
   <!-- Local Subdomain Navigations -->
@@ -27,7 +38,6 @@
       flex-direction: column;
     }
 
-    /* Embedded Global Header Styles */
     mrad-header {
       display: block;
       position: -webkit-sticky;
@@ -133,7 +143,6 @@
       white-space: nowrap;
     }
 
-    /* Embedded Global Footer Styles */
     mrad-footer {
       display: block;
       width: 100%;
@@ -190,7 +199,6 @@
       font-size: 0.85rem;
     }
 
-    /* 404 Layout */
     .error-wrapper {
       flex: 1;
       display: flex;
@@ -347,18 +355,14 @@
 </head>
 <body>
 
-  <!-- Universal Auto-Detecting Header -->
   <mrad-header></mrad-header>
-
-  <!-- Subdomain navigation -->
   <mrad-header-nav></mrad-header-nav>
 
-  <!-- Error Content Area -->
   <main class="error-wrapper">
     <div class="error-card">
       <div class="error-code">404</div>
       <h1 class="error-title">Page not found</h1>
-      <p class="error-desc">The requested resource could not be found under this service.</p>
+      <p class="error-desc">The link you followed may be broken, or the page may have been moved or removed from our infrastructure.</p>
       
       <div class="error-actions">
         <a href="/" id="returnHomeBtn" class="btn-home">Return Home</a>
@@ -367,7 +371,6 @@
     </div>
   </main>
 
-  <!-- Universal Auto-Detecting Footer -->
   <mrad-footer></mrad-footer>
 
   <script>
@@ -376,16 +379,7 @@
       const returnBtn = document.getElementById("returnHomeBtn");
       const titleTag = document.getElementById("pageTitle");
 
-      if (host.startsWith("mrad.mrad.")) {
-        returnBtn.href = "/";
-        titleTag.textContent = "404 — Page Not Found | Mrad Mrad";
-      } else if (host.includes("support.")) {
-        returnBtn.href = "/";
-        titleTag.textContent = "404 — Page Not Found | Mrad Support";
-      } else if (host.includes("email.")) {
-        returnBtn.href = "/";
-        titleTag.textContent = "404 — Page Not Found | Mrad Email";
-      } else if (host.includes("account.")) {
+      if (host.includes("account.")) {
         returnBtn.href = "/id/home";
         titleTag.textContent = "404 — Page Not Found | Mrad Account";
       } else {
