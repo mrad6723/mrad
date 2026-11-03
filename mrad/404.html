@@ -289,7 +289,7 @@
           .some((item) => item.startsWith("mrad_session="));
 
         const authActions = isLoggedIn
-          ? `<a href="https://account.mrad.co/id/home.html" class="mrad-btn-account">My Account</a>`
+          ? `<a href="https://account.mrad.co/id/home" class="mrad-btn-account">My Account</a>`
           : `
             <a href="https://account.mrad.co/sign-in" class="mrad-btn-auth">Sign In</a>
             <a href="https://account.mrad.co/sign-up" class="mrad-btn-auth">Sign Up</a>
@@ -386,7 +386,7 @@
         returnBtn.href = "/";
         titleTag.textContent = "404 — Page Not Found | Mrad Email";
       } else if (host.includes("account.")) {
-        returnBtn.href = "/id/home.html";
+        returnBtn.href = "/id/home";
         titleTag.textContent = "404 — Page Not Found | Mrad Account";
       } else {
         returnBtn.href = "/";
