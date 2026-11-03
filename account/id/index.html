@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mrad ID</title>
+  <title>Mrad Account</title>
 
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
   <!-- Global Shared Components -->
-  <script src="https://mrad.co/header.js?v=106" defer></script>
-  <script src="https://mrad.co/footer.js?v=106" defer></script>
+  <script src="https://mrad.co/header.js?v=107" defer></script>
+  <script src="https://mrad.co/footer.js?v=107" defer></script>
 
   <script>
     // If the user already has a session, redirect to /id/home
@@ -53,11 +53,19 @@
     }
 
     .gateway-logo {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       object-fit: contain;
       display: block;
-      margin-bottom: 28px;
+      margin-bottom: 12px;
+    }
+
+    .gateway-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #000000;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
     }
 
     .action-group {
@@ -118,6 +126,7 @@
   <main class="gateway-container">
     <div class="gateway-content">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="gateway-logo" />
+      <h1 class="gateway-title">Mrad Account</h1>
 
       <div class="action-group">
         <p class="action-label">Already have an account?</p>
