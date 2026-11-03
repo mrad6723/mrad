@@ -8,7 +8,6 @@
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
   <script>
-    // Immediate session check: if already signed in, redirect straight to dashboard
     const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
     if (hasSession) {
       window.location.replace("/id/home");
@@ -187,6 +186,15 @@
       box-shadow: 0 0 0 1px #000000;
     }
 
+    .error-msg {
+      color: #ef4444;
+      font-size: 0.82rem;
+      margin-bottom: 12px;
+      display: none;
+      text-align: left;
+      width: 100%;
+    }
+
     .btn-submit {
       width: 100%;
       height: 46px;
@@ -210,7 +218,6 @@
       cursor: not-allowed;
     }
 
-    /* Or Divider */
     .or-divider {
       margin: 16px 0;
       font-size: 0.88rem;
@@ -219,7 +226,6 @@
       text-align: center;
     }
 
-    /* Secondary Action Button */
     .btn-action-secondary {
       display: flex;
       align-items: center;
@@ -240,7 +246,6 @@
       background-color: #f8fafc;
     }
 
-    /* Bottom Footer */
     .mrad-bottom-footer {
       width: 100%;
       border-top: 1px solid #f1f5f9;
@@ -287,7 +292,6 @@
 </head>
 <body>
 
-  <!-- Header -->
   <header class="mrad-top-header">
     <div class="mrad-top-inner">
       <a href="https://mrad.co" class="mrad-top-brand">
@@ -301,7 +305,6 @@
     </div>
   </header>
 
-  <!-- Center Content -->
   <main class="main-wrap">
     <div class="auth-card">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
@@ -313,63 +316,30 @@
       <form id="signUpForm" class="auth-form">
         <div class="form-group">
           <label class="field-label" for="firstName">First Name</label>
-          <input 
-            class="field-input" 
-            type="text" 
-            id="firstName" 
-            name="firstName" 
-            required 
-            autocomplete="given-name"
-          />
+          <input class="field-input" type="text" id="firstName" name="firstName" required autocomplete="given-name" />
         </div>
 
         <div class="form-group">
           <label class="field-label" for="lastName">Last Name</label>
-          <input 
-            class="field-input" 
-            type="text" 
-            id="lastName" 
-            name="lastName" 
-            required 
-            autocomplete="family-name"
-          />
+          <input class="field-input" type="text" id="lastName" name="lastName" required autocomplete="family-name" />
         </div>
 
         <div class="form-group">
           <label class="field-label" for="phone">Phone</label>
-          <input 
-            class="field-input" 
-            type="tel" 
-            id="phone" 
-            name="phone" 
-            required 
-            autocomplete="tel"
-          />
+          <input class="field-input" type="tel" id="phone" name="phone" required autocomplete="tel" />
         </div>
 
         <div class="form-group">
           <label class="field-label" for="email">EMail</label>
-          <input 
-            class="field-input" 
-            type="email" 
-            id="email" 
-            name="email" 
-            required 
-            autocomplete="email"
-          />
+          <input class="field-input" type="email" id="email" name="email" required autocomplete="email" />
         </div>
 
         <div class="form-group">
           <label class="field-label" for="password">Password</label>
-          <input 
-            class="field-input" 
-            type="password" 
-            id="password" 
-            name="password" 
-            required 
-            autocomplete="new-password"
-          />
+          <input class="field-input" type="password" id="password" name="password" required minlength="6" autocomplete="new-password" />
         </div>
+
+        <div id="errorMsg" class="error-msg"></div>
 
         <button type="submit" id="btnSubmit" class="btn-submit">Sign Up</button>
 
@@ -380,7 +350,6 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="mrad-bottom-footer">
     <div class="mrad-bottom-inner">
       <div class="mrad-bottom-brand">
@@ -395,42 +364,73 @@
     </div>
   </footer>
 
-  <script>
+  <!-- Firebase Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // 1. Paste your Firebase project configuration here:
+    const firebaseConfig = {
+      apiKey: "YOUR_FIREBASE_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz520DckHkX2m14roo9boecdSbWI7G4KYJTbPehvmR2Kfrlw8jqjyGag45BHoaVIqSQzA/exec";
 
-    document.getElementById("signUpForm").addEventListener("submit", function (e) {
-      e.preventDefault();
+    const form = document.getElementById("signUpForm");
+    const btn = document.getElementById("btnSubmit");
+    const errorBox = document.getElementById("errorMsg");
 
-      const btn = document.getElementById("btnSubmit");
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      errorBox.style.display = "none";
       btn.disabled = true;
       btn.textContent = "Creating Account...";
 
-      const payload = {
-        firstName: document.getElementById("firstName").value.trim(),
-        lastName: document.getElementById("lastName").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        password: document.getElementById("password").value
-      };
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
 
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        // Scoped authentication cookie for all .mrad.co domains (30 days)
-        const token = "sess_" + Math.random().toString(36).substring(2);
-        document.cookie = "mrad_session=" + token + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax; Secure";
+      try {
+        // Step 1: Create real user inside Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Step 2: Post row data to Google Sheets
+        const payload = {
+          email: email,
+          password: password,
+          phone: phone,
+          firstName: firstName,
+          lastName: lastName
+        };
+
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).catch(err => console.error("Sheet log failed:", err));
+
+        // Step 3: Set cookie with real Firebase UID and redirect
+        document.cookie = "mrad_session=" + user.uid + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax; Secure";
         window.location.href = "/id/home";
-      })
-      .catch((err) => {
-        console.error("Error submitting sign-up:", err);
+
+      } catch (err) {
         btn.disabled = false;
         btn.textContent = "Sign Up";
-        alert("An error occurred. Please try again.");
-      });
+        errorBox.textContent = err.message.replace("Firebase: ", "");
+        errorBox.style.display = "block";
+      }
     });
   </script>
 
