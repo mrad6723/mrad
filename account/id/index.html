@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mrad ID Gateway</title>
+  <title>Mrad ID</title>
 
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
   <!-- Global Shared Components -->
-  <script src="https://mrad.co/header.js?v=102" defer></script>
-  <script src="https://mrad.co/footer.js?v=102" defer></script>
+  <script src="https://mrad.co/header.js?v=105" defer></script>
+  <script src="https://mrad.co/footer.js?v=105" defer></script>
 
   <script>
-    // If the user already has a session, automatically send them to /id/home.html
+    // If the user already has a session, redirect to /id/home
     const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
     if (hasSession) {
-      window.location.replace("/id/home.html");
+      window.location.replace("/id/home");
     }
   </script>
 
@@ -40,52 +40,41 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 60px 24px;
+      padding: 40px 20px;
     }
 
-    .gateway-card {
+    .gateway-content {
       width: 100%;
-      max-width: 460px;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
       text-align: center;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 44px 32px;
-      background: #ffffff;
     }
 
     .gateway-logo {
-      width: 44px;
-      height: 44px;
-      margin-bottom: 16px;
-    }
-
-    .gateway-title {
-      font-size: 1.8rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
-
-    .gateway-desc {
-      font-size: 0.95rem;
-      color: #64748b;
-      line-height: 1.5;
-      margin-bottom: 32px;
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      display: block;
     }
 
     .action-stack {
+      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn-action-primary {
       display: block;
+      width: 100%;
       background: #000000;
       color: #ffffff;
-      padding: 13px;
+      padding: 12px 0;
       border-radius: 8px;
-      font-size: 0.94rem;
+      font-size: 0.92rem;
       font-weight: 600;
       text-decoration: none;
       transition: opacity 0.15s ease;
@@ -97,11 +86,12 @@
 
     .btn-action-secondary {
       display: block;
+      width: 100%;
       background: #ffffff;
       color: #000000;
-      padding: 13px;
+      padding: 12px 0;
       border-radius: 8px;
-      font-size: 0.94rem;
+      font-size: 0.92rem;
       font-weight: 600;
       text-decoration: none;
       border: 1px solid #e2e8f0;
@@ -118,14 +108,12 @@
   <mrad-header></mrad-header>
 
   <main class="gateway-container">
-    <div class="gateway-card">
+    <div class="gateway-content">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="gateway-logo" />
-      <h1 class="gateway-title">Mrad ID</h1>
-      <p class="gateway-desc">One single account to sign in and securely manage all your services across the Mrad network.</p>
 
       <div class="action-stack">
-        <a href="/id/sign-in.html" class="btn-action-primary">Sign In with Mrad ID</a>
-        <a href="/id/sign-up.html" class="btn-action-secondary">Create a Mrad ID</a>
+        <a href="https://account.mrad.co/id/sign-in" class="btn-action-primary">Sign In</a>
+        <a href="https://account.mrad.co/id/sign-up" class="btn-action-secondary">Sign Up</a>
       </div>
     </div>
   </main>
