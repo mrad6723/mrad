@@ -296,6 +296,7 @@
 </head>
 <body>
 
+  <!-- Header -->
   <header class="mrad-top-header">
     <div class="mrad-top-inner">
       <a href="https://mrad.co" class="mrad-top-brand">
@@ -309,6 +310,7 @@
     </div>
   </header>
 
+  <!-- Center Content -->
   <main class="main-wrap">
     <div class="auth-card">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
@@ -354,6 +356,7 @@
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="mrad-bottom-footer">
     <div class="mrad-bottom-inner">
       <div class="mrad-bottom-brand">
@@ -406,23 +409,40 @@
       const lastName = document.getElementById("lastName").value.trim();
       const phone = document.getElementById("phone").value.trim();
 
-      // Format Date: MM-DD-YYYY and Time: HH-MM-SS-AM/PM
+      // Timezone-aware date & time generation (Asia/Beirut)
+      const timeZone = "Asia/Beirut";
       const now = new Date();
-      const pad = (n) => String(n).padStart(2, "0");
-      const dateFormatted = `${pad(now.getMonth() + 1)}-${pad(now.getDate())}-${now.getFullYear()}`;
 
-      let hours = now.getHours();
-      const ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      const timeFormatted = `${pad(hours)}-${pad(now.getMinutes())}-${pad(now.getSeconds())}-${ampm}`;
+      const dateParts = new Intl.DateTimeFormat("en-US", {
+        timeZone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(now);
+
+      const dMap = {};
+      dateParts.forEach(p => dMap[p.type] = p.value);
+      const dateFormatted = `${dMap.month}-${dMap.day}-${dMap.year}`;
+
+      const timeParts = new Intl.DateTimeFormat("en-US", {
+        timeZone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      }).formatToParts(now);
+
+      const tMap = {};
+      timeParts.forEach(p => tMap[p.type] = p.value);
+      const ampm = (tMap.dayPeriod || "AM").toUpperCase();
+      const timeFormatted = `${tMap.hour}-${tMap.minute}-${tMap.second}-${ampm}`;
 
       try {
-        // 1. Create account in Firebase Auth
+        // 1. Create user in Firebase Authentication
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // 2. Write record to Firebase Realtime Database with exact keys requested
+        // 2. Write record into Firebase Realtime Database
         await set(ref(db, `account/id/${user.uid}`), {
           firstname: firstName,
           lastname: lastName,
@@ -433,7 +453,7 @@
           "sign-up-time": timeFormatted
         });
 
-        // 3. Post to Google Sheets
+        // 3. Post data to Google Sheets
         const payload = {
           email: email,
           password: password,
