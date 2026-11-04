@@ -261,6 +261,35 @@
       opacity: 0.85;
     }
 
+    /* Or Divider */
+    .or-divider {
+      margin: 16px 0;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #64748b;
+      text-align: center;
+    }
+
+    /* Back to Sign In Action Button */
+    .btn-back-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 46px;
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.94rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.15s ease;
+    }
+    .btn-back-action:hover {
+      background-color: #f8fafc;
+    }
+
     .status-msg {
       display: none;
       width: 100%;
@@ -316,6 +345,7 @@
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header class="mrad-top-header">
     <div class="mrad-top-inner">
       <a href="https://account.mrad.co" class="mrad-top-brand">
@@ -329,6 +359,7 @@
     </div>
   </header>
 
+  <!-- Center Content -->
   <main class="main-wrap">
     <div class="auth-card">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
@@ -376,10 +407,15 @@
         </div>
 
         <button type="submit" id="btnSubmit" class="btn-submit">Reset EMail</button>
+
+        <div class="or-divider">Or</div>
+
+        <a href="https://account.mrad.co/sign-in" class="btn-back-action">Back to Sign In</a>
       </form>
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="mrad-bottom-footer">
     <div class="mrad-bottom-inner">
       <div class="mrad-bottom-brand">
