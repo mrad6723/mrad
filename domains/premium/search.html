@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Domain Search | Mrad Domains</title>
+
+  <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
+
+  <!-- Shared Global Components -->
+  <script src="https://mrad.co/header.js?v=302" defer></script>
+  <script src="https://mrad.co/footer.js?v=105" defer></script>
+
+  <!-- Local Subdomain Navigations -->
+  <script src="/header-navigation.js" defer></script>
+  <script src="/footer-navigation.js?v=300" defer></script>
+
+  <!-- Shared Data Fetcher -->
+  <script src="/premium/assets/js/premium-data.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .mrad-search-main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .mrad-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+
+    .mrad-breadcrumb a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .mrad-breadcrumb a:hover {
+      color: #000000;
+    }
+
+    .mrad-search-header {
+      margin-bottom: 32px;
+    }
+
+    .mrad-search-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #000000;
+      margin-bottom: 8px;
+    }
+
+    .mrad-search-subtitle {
+      color: #64748b;
+      font-size: 1rem;
+    }
+
+    .mrad-search-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* Filter Sidebar */
+    .mrad-filter-panel {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .mrad-panel-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #000000;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mrad-btn-reset {
+      background: none;
+      border: none;
+      color: #3b82f6;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .mrad-filter-group {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .mrad-filter-group:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .mrad-group-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #64748b;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .mrad-input-keyword {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .mrad-input-keyword:focus {
+      border-color: #000000;
+    }
+
+    .mrad-price-inputs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mrad-input-num {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .mrad-check-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: #1e293b;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+    .mrad-check-label input {
+      accent-color: #000000;
+      cursor: pointer;
+    }
+
+    .mrad-tld-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .mrad-chip {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.12s ease;
+    }
+
+    .mrad-chip.active {
+      background: #000000;
+      color: #ffffff;
+      border-color: #000000;
+    }
+
+    /* Results Grid */
+    .mrad-results-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mrad-results-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #64748b;
+    }
+
+    .mrad-sort-select {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      background: #ffffff;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .mrad-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .mrad-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .mrad-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.08);
+    }
+
+    .mrad-card-domain {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #000000;
+      text-decoration: none;
+      word-break: break-all;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .mrad-card-domain span {
+      color: #3b82f6;
+    }
+
+    .mrad-card-badges {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .mrad-card-tag {
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .mrad-card-pricing {
+      border-top: 1px solid #f1f5f9;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .mrad-card-price-main {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #000000;
+      margin-bottom: 4px;
+    }
+
+    .mrad-card-alt-price {
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    .mrad-card-btn {
+      display: block;
+      margin-top: 14px;
+      text-align: center;
+      background: #000000;
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+
+    .mrad-card-btn:hover {
+      opacity: 0.8;
+    }
+
+    .mrad-empty-card {
+      grid-column: 1 / -1;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 48px 20px;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .mrad-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #000000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 860px) {
+      .mrad-search-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <mrad-header></mrad-header>
+  <mrad-header-nav></mrad-header-nav>
+
+  <main class="mrad-search-main">
+    <div class="mrad-breadcrumb">
+      <a href="/premium">Premium</a>
+      <span>/</span>
+      <span>Search</span>
+    </div>
+
+    <div class="mrad-search-header">
+      <h1 class="mrad-search-title">Advanced Domain Search</h1>
+      <p class="mrad-search-subtitle">Filter our verified premium portfolio by length, extensions, and payment options.</p>
+    </div>
+
+    <div class="mrad-search-layout">
+      <!-- Filter Sidebar -->
+      <aside class="mrad-filter-panel">
+        <div class="mrad-panel-title">
+          <span>Filters</span>
+          <button type="button" class="mrad-btn-reset" id="btnResetFilters">Reset All</button>
+        </div>
+
+        <div class="mrad-filter-group">
+          <label class="mrad-group-label" for="filterKeyword">Keyword / Match</label>
+          <input
+            type="text"
+            id="filterKeyword"
+            class="mrad-input-keyword"
+            placeholder="e.g. pay, cloud, ai"
+          />
+        </div>
+
+        <div class="mrad-filter-group">
+          <label class="mrad-group-label">Max Length (Characters)</label>
+          <input
+            type="number"
+            id="filterLength"
+            class="mrad-input-num"
+            placeholder="e.g. 8"
+            min="1"
+          />
+        </div>
+
+        <div class="mrad-filter-group">
+          <label class="mrad-group-label">Buy-Now Budget ($)</label>
+          <div class="mrad-price-inputs">
+            <input
+              type="number"
+              id="filterMinPrice"
+              class="mrad-input-num"
+              placeholder="Min"
+              min="0"
+            />
+            <span>–</span>
+            <input
+              type="number"
+              id="filterMaxPrice"
+              class="mrad-input-num"
+              placeholder="Max"
+              min="0"
+            />
+          </div>
+        </div>
+
+        <div class="mrad-filter-group">
+          <label class="mrad-group-label">Acquisition Options</label>
+          <label class="mrad-check-label">
+            <input type="checkbox" id="checkBuyOnly" />
+            <span>Has Buy Price</span>
+          </label>
+          <label class="mrad-check-label">
+            <input type="checkbox" id="checkRentAvailable" />
+            <span>Lease / Rent Available</span>
+          </label>
+          <label class="mrad-check-label">
+            <input type="checkbox" id="checkInstallmentAvailable" />
+            <span>Installment Transfer</span>
+          </label>
+        </div>
+
+        <div class="mrad-filter-group">
+          <label class="mrad-group-label">Extension (TLD)</label>
+          <div class="mrad-tld-chips" id="tldChipsContainer">
+            <span class="mrad-chip active" data-ext="all">All</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Results Grid -->
+      <section class="mrad-results-panel">
+        <div class="mrad-results-bar">
+          <span id="resultsCount">Loading inventory...</span>
+          <select id="searchSort" class="mrad-sort-select">
+            <option value="name-asc">Alphabetical (A - Z)</option>
+            <option value="name-desc">Alphabetical (Z - A)</option>
+            <option value="price-asc">Price (Lowest)</option>
+            <option value="price-desc">Price (Highest)</option>
+            <option value="length-asc">Length (Shortest)</option>
+          </select>
+        </div>
+
+        <div class="mrad-cards-grid" id="cardsGrid">
+          <div class="mrad-empty-card">
+            <div class="mrad-spinner"></div>
+            <span>Fetching premium domains...</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <mrad-footer>
+    <mrad-footer-nav></mrad-footer-nav>
+  </mrad-footer>
+
+  <script>
+    (async function () {
+      let allDomains = [];
+      let activeTld = "all";
+
+      const grid = document.getElementById("cardsGrid");
+      const countEl = document.getElementById("resultsCount");
+      const keywordInput = document.getElementById("filterKeyword");
+      const lengthInput = document.getElementById("filterLength");
+      const minPriceInput = document.getElementById("filterMinPrice");
+      const maxPriceInput = document.getElementById("filterMaxPrice");
+      const checkBuy = document.getElementById("checkBuyOnly");
+      const checkRent = document.getElementById("checkRentAvailable");
+      const checkInst = document.getElementById("checkInstallmentAvailable");
+      const sortSelect = document.getElementById("searchSort");
+      const chipsContainer = document.getElementById("tldChipsContainer");
+      const btnReset = document.getElementById("btnResetFilters");
+
+      function formatPrice(val) {
+        return val !== null && val !== undefined ? "$" + Number(val).toLocaleString() : null;
+      }
+
+      function renderGrid(list) {
+        countEl.textContent = `${list.length} ${list.length === 1 ? "domain" : "domains"} found`;
+
+        if (!list.length) {
+          grid.innerHTML = `
+            <div class="mrad-empty-card">
+              <h3 style="font-size: 1.15rem; color: #0f172a; margin-bottom: 6px;">No domains matched your criteria</h3>
+              <p style="font-size: 0.9rem;">Try adjusting price limits, length, or clearing your keyword filter.</p>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = list
+          .map((item) => {
+            const ext = item.extension || "";
+            const baseName = item.name || item.domain.replace(ext, "");
+            const viewUrl = `/premium/view?domain=${encodeURIComponent(item.domain)}`;
+            const buyPrice = formatPrice(item.buyPrice);
+            const rentPrice = formatPrice(item.rentPrice);
+            const instPrice = formatPrice(item.installmentPrice);
+
+            return `
+              <div class="mrad-card">
+                <div>
+                  <a href="${viewUrl}" class="mrad-card-domain">
+                    ${baseName}<span>${ext}</span>
+                  </a>
+                  <div class="mrad-card-badges">
+                    <span class="mrad-card-tag">${ext || "—"}</span>
+                    <span class="mrad-card-tag">${baseName.length} chars</span>
+                  </div>
+                </div>
+
+                <div class="mrad-card-pricing">
+                  <div class="mrad-card-price-main">${buyPrice || "Make Offer"}</div>
+                  ${
+                    rentPrice
+                      ? `<div class="mrad-card-alt-price">Lease: ${rentPrice}/mo</div>`
+                      : ""
+                  }
+                  ${
+                    instPrice
+                      ? `<div class="mrad-card-alt-price">Installment: ${instPrice}/mo</div>`
+                      : ""
+                  }
+                  <a href="${viewUrl}" class="mrad-card-btn">View Asset</a>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function applyFilters() {
+        const kw = keywordInput.value.trim().toLowerCase();
+        const maxLen = parseInt(lengthInput.value, 10);
+        const minP = parseFloat(minPriceInput.value);
+        const maxP = parseFloat(maxPriceInput.value);
+        const requireBuy = checkBuy.checked;
+        const requireRent = checkRent.checked;
+        const requireInst = checkInst.checked;
+        const sortVal = sortSelect.value;
+
+        let filtered = allDomains.filter((d) => {
+          const baseName = d.name || d.domain.split(".")[0];
+          if (kw && !d.domain.toLowerCase().includes(kw)) return false;
+          if (!isNaN(maxLen) && baseName.length > maxLen) return false;
+          if (!isNaN(minP) && (d.buyPrice === null || d.buyPrice < minP)) return false;
+          if (!isNaN(maxP) && (d.buyPrice === null || d.buyPrice > maxP)) return false;
+          if (requireBuy && d.buyPrice === null) return false;
+          if (requireRent && d.rentPrice === null) return false;
+          if (requireInst && d.installmentPrice === null) return false;
+          if (activeTld !== "all" && d.extension.toLowerCase() !== activeTld) return false;
+          return true;
+        });
+
+        filtered.sort((a, b) => {
+          const nameA = a.name || a.domain;
+          const nameB = b.name || b.domain;
+          if (sortVal === "name-asc") return a.domain.localeCompare(b.domain);
+          if (sortVal === "name-desc") return b.domain.localeCompare(a.domain);
+          if (sortVal === "price-asc") return (a.buyPrice || 0) - (b.buyPrice || 0);
+          if (sortVal === "price-desc") return (b.buyPrice || 0) - (a.buyPrice || 0);
+          if (sortVal === "length-asc") return nameA.length - nameB.length;
+          return 0;
+        });
+
+        renderGrid(filtered);
+      }
+
+      // Initial Load
+      allDomains = await MRAD_PREMIUM.getDomains();
+
+      // Read initial URL parameter queries (e.g. /premium/search?q=booth)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has("q")) {
+        keywordInput.value = urlParams.get("q");
+      }
+
+      // Populate TLD Chips
+      const extensions = Array.from(
+        new Set(allDomains.map((d) => d.extension).filter(Boolean))
+      ).sort();
+
+      extensions.forEach((ext) => {
+        const chip = document.createElement("span");
+        chip.className = "mrad-chip";
+        chip.dataset.ext = ext.toLowerCase();
+        chip.textContent = ext;
+        chip.addEventListener("click", () => {
+          document.querySelectorAll(".mrad-chip").forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          activeTld = ext.toLowerCase();
+          applyFilters();
+        });
+        chipsContainer.appendChild(chip);
+      });
+
+      chipsContainer.querySelector('[data-ext="all"]').addEventListener("click", (e) => {
+        document.querySelectorAll(".mrad-chip").forEach((c) => c.classList.remove("active"));
+        e.target.classList.add("active");
+        activeTld = "all";
+        applyFilters();
+      });
+
+      // Event listeners
+      [keywordInput, lengthInput, minPriceInput, maxPriceInput].forEach((el) =>
+        el.addEventListener("input", applyFilters)
+      );
+      [checkBuy, checkRent, checkInst, sortSelect].forEach((el) =>
+        el.addEventListener("change", applyFilters)
+      );
+
+      btnReset.addEventListener("click", () => {
+        keywordInput.value = "";
+        lengthInput.value = "";
+        minPriceInput.value = "";
+        maxPriceInput.value = "";
+        checkBuy.checked = false;
+        checkRent.checked = false;
+        checkInst.checked = false;
+        activeTld = "all";
+        document.querySelectorAll(".mrad-chip").forEach((c) => c.classList.remove("active"));
+        chipsContainer.querySelector('[data-ext="all"]').classList.add("active");
+        applyFilters();
+      });
+
+      applyFilters();
+    })();
+  </script>
+</body>
+</html>

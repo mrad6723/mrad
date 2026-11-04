@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="viewPageTitle">Premium Domain Details | Mrad Domains</title>
+
+  <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
+
+  <!-- Shared Global Components -->
+  <script src="https://mrad.co/header.js?v=302" defer></script>
+  <script src="https://mrad.co/footer.js?v=105" defer></script>
+
+  <!-- Local Subdomain Navigations -->
+  <script src="/header-navigation.js" defer></script>
+  <script src="/footer-navigation.js?v=300" defer></script>
+
+  <!-- Shared Data Fetcher -->
+  <script src="/premium/assets/js/premium-data.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .mrad-view-main {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .mrad-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: #64748b;
+      margin-bottom: 24px;
+    }
+
+    .mrad-breadcrumb a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .mrad-breadcrumb a:hover {
+      color: #000000;
+    }
+
+    /* State Boxes */
+    .mrad-state-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 60px 24px;
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .mrad-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #000000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Domain Hero Card */
+    .mrad-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .mrad-detail-primary {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 36px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .mrad-badge-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .mrad-domain-name {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #000000;
+      word-break: break-all;
+      margin-bottom: 8px;
+    }
+
+    .mrad-domain-name span {
+      color: #3b82f6;
+    }
+
+    .mrad-domain-subtitle {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .mrad-specs-grid {
+      border-top: 1px solid #f1f5f9;
+      padding-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .mrad-spec-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mrad-spec-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .mrad-spec-val {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* Checkout & Pricing Card */
+    .mrad-pricing-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 80px;
+    }
+
+    .mrad-price-block {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .mrad-price-label {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .mrad-price-main {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #000000;
+      letter-spacing: -0.02em;
+    }
+
+    .mrad-alt-pricing {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .mrad-alt-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-radius: 6px;
+      border: 1px solid #f1f5f9;
+    }
+
+    .mrad-alt-row .alt-lbl {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .mrad-alt-row .alt-val {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .mrad-btn-buy {
+      display: block;
+      width: 100%;
+      background: #000000;
+      color: #ffffff;
+      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+      cursor: pointer;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    .mrad-btn-buy:hover {
+      opacity: 0.85;
+    }
+
+    .mrad-btn-inquire {
+      display: block;
+      width: 100%;
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.15s ease;
+    }
+
+    .mrad-btn-inquire:hover {
+      background: #f1f5f9;
+    }
+
+    .mrad-escrow-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #94a3b8;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .mrad-detail-grid {
+        grid-template-columns: 1fr;
+      }
+      .mrad-pricing-card {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <mrad-header></mrad-header>
+  <mrad-header-nav></mrad-header-nav>
+
+  <main class="mrad-view-main">
+    <div class="mrad-breadcrumb">
+      <a href="/premium">Premium</a>
+      <span>/</span>
+      <a href="/premium/all">Inventory</a>
+      <span>/</span>
+      <span id="breadcrumbCurrent">Loading...</span>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="mrad-state-card">
+      <div class="mrad-spinner"></div>
+      <p style="color: #64748b; font-size: 0.95rem;">Retrieving domain asset details...</p>
+    </div>
+
+    <!-- Not Found State -->
+    <div id="notFoundState" class="mrad-state-card" style="display: none;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 8px;">Domain Not Found</h2>
+      <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 24px;">The domain you are inquiring about is not listed in our verified premium inventory.</p>
+      <a href="/premium/all" class="mrad-btn-buy" style="display: inline-block; width: auto; padding: 10px 24px;">Browse Catalog</a>
+    </div>
+
+    <!-- Main Detail Content -->
+    <div id="domainContent" class="mrad-detail-grid" style="display: none;">
+      <div class="mrad-detail-primary">
+        <div class="mrad-badge-verified">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Verified Premium Asset
+        </div>
+
+        <h1 class="mrad-domain-name" id="dispDomain">domain<span>.ext</span></h1>
+        <p class="mrad-domain-subtitle">Exclusive high-authority digital brand available for direct acquisition, lease, or structured installment transfer.</p>
+
+        <div class="mrad-specs-grid">
+          <div class="mrad-spec-item">
+            <span class="mrad-spec-label">Domain Name</span>
+            <span class="mrad-spec-val" id="dispName">—</span>
+          </div>
+          <div class="mrad-spec-item">
+            <span class="mrad-spec-label">Extension</span>
+            <span class="mrad-spec-val" id="dispExt">—</span>
+          </div>
+          <div class="mrad-spec-item">
+            <span class="mrad-spec-label">Transfer Speed</span>
+            <span class="mrad-spec-val">Fast Push (< 24h)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Sidebar -->
+      <aside class="mrad-pricing-card">
+        <div class="mrad-price-block">
+          <div class="mrad-price-label">Buy-It-Now Price</div>
+          <div class="mrad-price-main" id="dispBuyPrice">$0</div>
+        </div>
+
+        <div class="mrad-alt-pricing">
+          <div class="mrad-alt-row" id="rowRent">
+            <span class="alt-lbl">Monthly Lease</span>
+            <span class="alt-val" id="dispRentPrice">—</span>
+          </div>
+          <div class="mrad-alt-row" id="rowInstallment">
+            <span class="alt-lbl">Installment</span>
+            <span class="alt-val" id="dispInstallmentPrice">—</span>
+          </div>
+        </div>
+
+        <button type="button" class="mrad-btn-buy" id="btnAcquire">Acquire Domain</button>
+        <a href="https://support.mrad.co" class="mrad-btn-inquire">Make an Offer / Inquire</a>
+
+        <div class="mrad-escrow-notice">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Secured escrow & fast ownership push
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <mrad-footer>
+    <mrad-footer-nav></mrad-footer-nav>
+  </mrad-footer>
+
+  <script>
+    (async function () {
+      const params = new URLSearchParams(window.location.search);
+      const domainQuery = params.get("domain") || params.get("name");
+
+      const loadingEl = document.getElementById("loadingState");
+      const notFoundEl = document.getElementById("notFoundState");
+      const contentEl = document.getElementById("domainContent");
+
+      if (!domainQuery) {
+        loadingEl.style.display = "none";
+        notFoundEl.style.display = "block";
+        return;
+      }
+
+      const domainData = await MRAD_PREMIUM.getDomainByName(domainQuery);
+
+      loadingEl.style.display = "none";
+
+      if (!domainData) {
+        notFoundEl.style.display = "block";
+        return;
+      }
+
+      // Populate Data
+      document.title = `${domainData.domain} — Premium Domain | Mrad Domains`;
+      document.getElementById("breadcrumbCurrent").textContent = domainData.domain;
+
+      // Styled domain display
+      const ext = domainData.extension || "";
+      const baseName = domainData.name || domainData.domain.replace(ext, "");
+      document.getElementById("dispDomain").innerHTML = `${baseName}<span>${ext}</span>`;
+      document.getElementById("dispName").textContent = baseName;
+      document.getElementById("dispExt").textContent = ext;
+
+      // Pricing
+      const fmt = (num) => (num !== null ? "$" + num.toLocaleString() : null);
+
+      const buyFormatted = fmt(domainData.buyPrice);
+      document.getElementById("dispBuyPrice").textContent = buyFormatted || "Make Offer";
+
+      const rentFormatted = fmt(domainData.rentPrice);
+      if (rentFormatted) {
+        document.getElementById("dispRentPrice").textContent = `${rentFormatted}/mo`;
+      } else {
+        document.getElementById("rowRent").style.display = "none";
+      }
+
+      const instFormatted = fmt(domainData.installmentPrice);
+      if (instFormatted) {
+        document.getElementById("dispInstallmentPrice").textContent = `${instFormatted}/mo`;
+      } else {
+        document.getElementById("rowInstallment").style.display = "none";
+      }
+
+      document.getElementById("btnAcquire").addEventListener("click", () => {
+        window.location.href = `https://support.mrad.co?topic=domain_purchase&domain=${encodeURIComponent(domainData.domain)}`;
+      });
+
+      contentEl.style.display = "grid";
+    })();
+  </script>
+</body>
+</html>
