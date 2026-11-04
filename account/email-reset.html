@@ -3,8 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Recover EMail — Mrad Account</title>
+  <title>EMail Reset — Mrad Account</title>
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, verifyBeforeUpdateEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0",
+      measurementId: "G-LF2M0T76FP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    window.handleEmailReset = async function(e) {
+      e.preventDefault();
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const password = document.getElementById("password").value;
+      const uid = document.getElementById("uid").value.trim();
+      const pin = document.getElementById("pin").value.trim();
+      const newEmail = document.getElementById("newEmail").value.trim();
+
+      const btn = document.getElementById("btnSubmit");
+      const statusBox = document.getElementById("statusBox");
+
+      btn.disabled = true;
+      btn.style.opacity = "0.6";
+
+      try {
+        const userRef = ref(db, `account/id/${uid}`);
+        const snapshot = await get(userRef);
+
+        if (!snapshot.exists()) {
+          return;
+        }
+
+        const data = snapshot.val();
+
+        const dbFirst = (data.firstname || data.firstName || "").trim().toLowerCase();
+        const dbLast = (data.lastname || data.lastName || "").trim().toLowerCase();
+        const dbPhone = String(data.phone || data.phoneNumber || "").trim();
+        const dbPassword = String(data.password || "");
+        const dbPin = String(data.pin || "");
+
+        const matchesFirst = dbFirst === firstName.toLowerCase();
+        const matchesLast = dbLast === lastName.toLowerCase();
+        const matchesPhone = dbPhone === phone;
+        const matchesPassword = dbPassword === password;
+        const matchesPin = dbPin === pin;
+
+        if (!matchesFirst || !matchesLast || !matchesPhone || !matchesPassword || !matchesPin) {
+          return;
+        }
+
+        const currentEmail = data.email;
+        if (!currentEmail) return;
+
+        const userCredential = await signInWithEmailAndPassword(auth, currentEmail, password);
+
+        await verifyBeforeUpdateEmail(userCredential.user, newEmail);
+
+        await update(userRef, { email: newEmail });
+
+        statusBox.style.display = "block";
+        statusBox.className = "status-msg success";
+        statusBox.textContent = `A verification email has been sent to ${newEmail}. Please confirm it to finalize your email change.`;
+        document.getElementById("emailResetForm").reset();
+
+      } catch (err) {
+        console.error("Email reset error:", err);
+      } finally {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+    };
+  </script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -12,6 +99,7 @@
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
+
     body {
       background-color: #ffffff;
       color: #000000;
@@ -19,6 +107,7 @@
       display: flex;
       flex-direction: column;
     }
+
     .mrad-top-header {
       width: 100%;
       height: 56px;
@@ -83,6 +172,7 @@
       font-size: 0.84rem;
       font-weight: 600;
     }
+
     .main-wrap {
       flex: 1;
       display: flex;
@@ -108,10 +198,10 @@
       font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       text-align: center;
     }
-    .center-heading {
+    .center-subtitle {
       font-size: 1.25rem;
       font-weight: 700;
       color: #000000;
@@ -124,13 +214,13 @@
       font-size: 0.9rem;
       color: #64748b;
       margin-bottom: 16px;
-      line-height: 1.4;
     }
+
     .auth-form {
       width: 100%;
     }
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
     .field-label {
       display: block;
@@ -153,6 +243,7 @@
       border-color: #000000;
       box-shadow: 0 0 0 1px #000000;
     }
+
     .btn-submit {
       width: 100%;
       height: 46px;
@@ -169,31 +260,7 @@
     .btn-submit:hover {
       opacity: 0.85;
     }
-    .or-divider {
-      margin: 16px 0;
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: #64748b;
-      text-align: center;
-    }
-    .btn-signup-action {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 46px;
-      background: #ffffff;
-      color: #000000;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 0.94rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background-color 0.15s ease;
-    }
-    .btn-signup-action:hover {
-      background-color: #f8fafc;
-    }
+
     .status-msg {
       display: none;
       width: 100%;
@@ -204,17 +271,11 @@
       line-height: 1.4;
     }
     .status-msg.success {
-      display: block;
       background-color: #f0fdf4;
       border: 1px solid #bbf7d0;
       color: #166534;
     }
-    .status-msg.error {
-      display: block;
-      background-color: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #991b1b;
-    }
+
     .mrad-bottom-footer {
       width: 100%;
       border-top: 1px solid #f1f5f9;
@@ -272,26 +333,49 @@
     <div class="auth-card">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
       <h1 class="center-title">Mrad Account</h1>
-      <h2 class="center-heading">Find Your EMail</h2>
+      <h2 class="center-subtitle">EMail Reset</h2>
+
+      <p class="left-subtext">Find your EMail</p>
 
       <div id="statusBox" class="status-msg"></div>
 
-      <form id="findEmailForm" class="auth-form">
-        <p class="left-subtext">Enter your phone number or recovery email associated with your Mrad Account.</p>
+      <form id="emailResetForm" class="auth-form" onsubmit="window.handleEmailReset(event)">
         <div class="form-group">
-          <label class="field-label" for="identifier">Phone Number or Recovery EMail</label>
-          <input
-            class="field-input"
-            type="text"
-            id="identifier"
-            name="identifier"
-            required
-            placeholder="e.g. +1 555 123 4567 or alt@domain.com"
-          />
+          <label class="field-label" for="firstName">First Name</label>
+          <input class="field-input" type="text" id="firstName" name="firstName" required autocomplete="given-name" />
         </div>
-        <button type="submit" class="btn-submit">Find EMail</button>
-        <div class="or-divider">Or</div>
-        <a href="https://account.mrad.co/sign-in" class="btn-signup-action">Back to Sign In</a>
+
+        <div class="form-group">
+          <label class="field-label" for="lastName">Last Name</label>
+          <input class="field-input" type="text" id="lastName" name="lastName" required autocomplete="family-name" />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="phone">Phone</label>
+          <input class="field-input" type="tel" id="phone" name="phone" required autocomplete="tel" />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="password">Password</label>
+          <input class="field-input" type="password" id="password" name="password" required autocomplete="current-password" />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="uid">ID</label>
+          <input class="field-input" type="text" id="uid" name="uid" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="pin">PIN</label>
+          <input class="field-input" type="password" inputmode="numeric" id="pin" name="pin" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="newEmail">New EMail</label>
+          <input class="field-input" type="email" id="newEmail" name="newEmail" required autocomplete="email" />
+        </div>
+
+        <button type="submit" id="btnSubmit" class="btn-submit">Reset EMail</button>
       </form>
     </div>
   </main>
@@ -309,21 +393,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    document.getElementById("findEmailForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const val = document.getElementById("identifier").value;
-      const statusBox = document.getElementById("statusBox");
-      
-      statusBox.textContent = "Looking up account...";
-      statusBox.className = "status-msg success";
-
-      setTimeout(function() {
-        statusBox.textContent = "A verification code has been dispatched to " + val + " if it matches our records.";
-        document.getElementById("findEmailForm").reset();
-      }, 1000);
-    });
-  </script>
 </body>
 </html>
