@@ -18,6 +18,10 @@
   </script>
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
 
+  <!-- Shared Global Components -->
+  <script src="https://mrad.co/header.js?v=302" defer></script>
+  <script src="https://mrad.co/footer.js?v=102" defer></script>
+
   <!-- Local Subdomain Navigations -->
   <script src="/header-navigation.js" defer></script>
   <script src="/footer-navigation.js?v=300" defer></script>
@@ -31,172 +35,11 @@
     }
 
     body {
-      background-color: #ffffff;
-      color: #000000;
-      min-height: 100vh;
+      background-color: #f8fafc;
+      color: #0f172a;
       display: flex;
       flex-direction: column;
-    }
-
-    mrad-header {
-      display: block;
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      z-index: 10000;
-      width: 100%;
-      background: #ffffff;
-    }
-
-    .mrad-global-bar {
-      width: 100%;
-      background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    .mrad-global-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      height: 56px;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .mrad-global-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .mrad-brand-logo {
-      width: 28px;
-      height: 28px;
-      object-fit: contain;
-      border-radius: 4px;
-      display: block;
-    }
-
-    .mrad-brand-title {
-      color: #000000;
-      font-size: 1.18rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .mrad-service-badge {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      color: #000000;
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 5px;
-      text-transform: uppercase;
-    }
-
-    .mrad-global-actions {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .mrad-support-link {
-      color: #000000;
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      transition: opacity 0.15s ease;
-    }
-
-    .mrad-auth-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .mrad-btn-auth {
-      background: #ffffff;
-      color: #000000;
-      text-decoration: none;
-      padding: 6px 14px;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      font-size: 0.84rem;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .mrad-btn-account {
-      background: #000000;
-      color: #ffffff;
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 0.84rem;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    mrad-footer {
-      display: block;
-      width: 100%;
-      background: #ffffff;
-      margin-top: auto;
-    }
-
-    .mrad-global-footer {
-      width: 100%;
-      border-top: 1px solid #e2e8f0;
-      background: #ffffff;
-    }
-
-    .mrad-local-slot-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 48px 20px 32px;
-    }
-
-    .mrad-footer-bottom {
-      border-top: 1px solid #f1f5f9;
-      background: #ffffff;
-      padding: 20px 0;
-    }
-
-    .mrad-footer-bottom-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .mrad-footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #64748b;
-      font-size: 0.85rem;
-    }
-
-    .mrad-footer-legal {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .mrad-footer-legal a {
-      color: #64748b;
-      text-decoration: none;
-      font-size: 0.85rem;
+      min-height: 100vh;
     }
 
     .error-wrapper {
@@ -204,154 +47,88 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 60px 24px;
+      padding: 40px 20px;
     }
 
     .error-card {
-      max-width: 520px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      max-width: 480px;
+      width: 100%;
+      padding: 40px 32px;
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
     }
 
     .error-code {
-      font-size: 5.5rem;
+      font-size: 4rem;
       font-weight: 800;
-      letter-spacing: -0.04em;
       line-height: 1;
-      color: #000000;
-      margin-bottom: 16px;
+      color: #0f172a;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
     }
 
     .error-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: #000000;
-      letter-spacing: -0.01em;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
     }
 
     .error-desc {
-      font-size: 1rem;
-      color: #475569;
-      line-height: 1.6;
-      margin-bottom: 32px;
+      font-size: 0.95rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 28px;
     }
 
     .error-actions {
       display: flex;
+      gap: 12px;
       justify-content: center;
-      gap: 14px;
     }
 
     .btn-home {
-      background: #000000;
+      display: inline-block;
+      background: #0f172a;
       color: #ffffff;
-      padding: 11px 22px;
-      border-radius: 7px;
-      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 6px;
       font-size: 0.9rem;
+      font-weight: 600;
       text-decoration: none;
+      transition: background-color 0.15s ease;
+    }
+
+    .btn-home:hover {
+      background: #1e293b;
     }
 
     .btn-support {
+      display: inline-block;
       background: #ffffff;
-      color: #000000;
-      padding: 11px 22px;
-      border-radius: 7px;
-      font-weight: 600;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+      padding: 10px 20px;
+      border-radius: 6px;
       font-size: 0.9rem;
+      font-weight: 600;
       text-decoration: none;
-      border: 1px solid #e2e8f0;
+      transition: background-color 0.15s ease;
+    }
+
+    .btn-support:hover {
+      background: #f1f5f9;
     }
 
     @media (max-width: 480px) {
-      .error-code {
-        font-size: 4rem;
-      }
       .error-actions {
         flex-direction: column;
       }
-      .mrad-support-link {
-        display: none;
-      }
     }
   </style>
-
-  <script>
-    class MradHeaderUniversal extends HTMLElement {
-      connectedCallback() {
-        const host = window.location.hostname.toLowerCase();
-        
-        let serviceName = "";
-        if (host.startsWith("mrad.mrad.")) serviceName = "Mrad";
-        else if (host.includes("account.")) serviceName = "Account";
-        else if (host.includes("domains.")) serviceName = "Domains";
-        else if (host.includes("email.")) serviceName = "Email";
-        else if (host.includes("support.")) serviceName = "Support";
-
-        const badgeHtml = serviceName 
-          ? `<span class="mrad-service-badge">${serviceName}</span>` 
-          : "";
-
-        const isLoggedIn = document.cookie
-          .split("; ")
-          .some((item) => item.startsWith("mrad_session="));
-
-        const authActions = isLoggedIn
-          ? `<a href="https://account.mrad.co/uid/home" class="mrad-btn-account">My Account</a>`
-          : `
-            <a href="https://account.mrad.co/sign-in" class="mrad-btn-auth">Sign In</a>
-            <a href="https://account.mrad.co/sign-up" class="mrad-btn-auth">Sign Up</a>
-          `;
-
-        this.innerHTML = `
-          <header class="mrad-global-bar">
-            <div class="mrad-global-container">
-              <a href="/" class="mrad-global-brand">
-                <img src="https://mrad.co/image/logo.png" alt="Mrad" class="mrad-brand-logo" onerror="this.style.display='none'" />
-                <span class="mrad-brand-title">Mrad ${badgeHtml}</span>
-              </a>
-              <div class="mrad-global-actions">
-                <a href="https://support.mrad.co" class="mrad-support-link">Support</a>
-                <div class="mrad-auth-group">
-                  ${authActions}
-                </div>
-              </div>
-            </div>
-          </header>
-        `;
-      }
-    }
-    if (!customElements.get("mrad-header")) {
-      customElements.define("mrad-header", MradHeaderUniversal);
-    }
-
-    class MradFooterUniversal extends HTMLElement {
-      connectedCallback() {
-        const currentYear = new Date().getFullYear();
-        this.innerHTML = `
-          <footer class="mrad-global-footer">
-            <div class="mrad-local-slot-container" id="localSlot"></div>
-            <div class="mrad-footer-bottom">
-              <div class="mrad-footer-bottom-container">
-                <div class="mrad-footer-brand">
-                  <img src="https://mrad.co/image/logo.png" alt="Mrad" style="width:20px;height:20px;object-fit:contain;" onerror="this.style.display='none'" />
-                  <span>&copy; ${currentYear} Mrad. All rights reserved.</span>
-                </div>
-                <div class="mrad-footer-legal">
-                  <a href="https://mrad.co/privacy">Privacy</a>
-                  <a href="https://mrad.co/terms">Terms</a>
-                  <a href="https://status.mrad.co">System Status</a>
-                </div>
-              </div>
-            </div>
-          </footer>
-        `;
-      }
-    }
-    if (!customElements.get("mrad-footer")) {
-      customElements.define("mrad-footer", MradFooterUniversal);
-    }
-  </script>
 </head>
 <body>
 
@@ -363,7 +140,6 @@
       <div class="error-code">404</div>
       <h1 class="error-title">Page not found</h1>
       <p class="error-desc">The link you followed may be broken, or the page may have been moved or removed from our infrastructure.</p>
-      
       <div class="error-actions">
         <a href="/" id="returnHomeBtn" class="btn-home">Return Home</a>
         <a href="https://support.mrad.co" class="btn-support">Contact Support</a>
@@ -387,6 +163,5 @@
       }
     })();
   </script>
-
 </body>
 </html>
