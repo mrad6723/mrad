@@ -26,6 +26,13 @@
     const auth = getAuth(app);
     const db = getDatabase(app);
 
+    function showStatus(text, type) {
+      const statusBox = document.getElementById("statusBox");
+      statusBox.style.display = "block";
+      statusBox.className = "status-msg " + type;
+      statusBox.textContent = text;
+    }
+
     window.handleEmailReset = async function(e) {
       e.preventDefault();
 
@@ -38,21 +45,30 @@
       const newEmail = document.getElementById("newEmail").value.trim();
 
       const btn = document.getElementById("btnSubmit");
-      const statusBox = document.getElementById("statusBox");
 
       btn.disabled = true;
       btn.style.opacity = "0.6";
+      showStatus("Verifying identity...", "loading");
 
       try {
+        // 1. Fetch user record from RTDB
         const userRef = ref(db, `account/id/${uid}`);
-        const snapshot = await get(userRef);
+        let snapshot;
+        try {
+          snapshot = await get(userRef);
+        } catch (dbErr) {
+          showStatus("Database access denied. Check Realtime Database security rules.", "error");
+          return;
+        }
 
         if (!snapshot.exists()) {
+          showStatus("Account ID not found. Verify the exact ID capitalization.", "error");
           return;
         }
 
         const data = snapshot.val();
 
+        // 2. Exact match comparisons
         const dbFirst = (data.firstname || data.firstName || "").trim().toLowerCase();
         const dbLast = (data.lastname || data.lastName || "").trim().toLowerCase();
         const dbPhone = String(data.phone || data.phoneNumber || "").trim();
@@ -66,25 +82,32 @@
         const matchesPin = dbPin === pin;
 
         if (!matchesFirst || !matchesLast || !matchesPhone || !matchesPassword || !matchesPin) {
+          showStatus("Provided details do not match account records.", "error");
           return;
         }
 
         const currentEmail = data.email;
-        if (!currentEmail) return;
+        if (!currentEmail) {
+          showStatus("No email registered for this account.", "error");
+          return;
+        }
 
+        // 3. Authenticate with current credentials
+        showStatus("Authenticating session...", "loading");
         const userCredential = await signInWithEmailAndPassword(auth, currentEmail, password);
 
+        // 4. Request email update verification link
+        showStatus("Sending verification to new email...", "loading");
         await verifyBeforeUpdateEmail(userCredential.user, newEmail);
 
+        // 5. Update database record
         await update(userRef, { email: newEmail });
 
-        statusBox.style.display = "block";
-        statusBox.className = "status-msg success";
-        statusBox.textContent = `A verification email has been sent to ${newEmail}. Please confirm it to finalize your email change.`;
+        showStatus(`Verification email sent to ${newEmail}. Please click the link to confirm.`, "success");
         document.getElementById("emailResetForm").reset();
 
       } catch (err) {
-        console.error("Email reset error:", err);
+        showStatus("Error: " + (err.message || err), "error");
       } finally {
         btn.disabled = false;
         btn.style.opacity = "1";
@@ -261,7 +284,6 @@
       opacity: 0.85;
     }
 
-    /* Or Divider */
     .or-divider {
       margin: 16px 0;
       font-size: 0.88rem;
@@ -270,7 +292,6 @@
       text-align: center;
     }
 
-    /* Back to Sign In Action Button */
     .btn-back-action {
       display: flex;
       align-items: center;
@@ -298,11 +319,22 @@
       font-size: 0.88rem;
       margin-bottom: 16px;
       line-height: 1.4;
+      text-align: center;
     }
     .status-msg.success {
       background-color: #f0fdf4;
       border: 1px solid #bbf7d0;
       color: #166534;
+    }
+    .status-msg.error {
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+    .status-msg.loading {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #334155;
     }
 
     .mrad-bottom-footer {
@@ -345,7 +377,6 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header class="mrad-top-header">
     <div class="mrad-top-inner">
       <a href="https://account.mrad.co" class="mrad-top-brand">
@@ -359,7 +390,6 @@
     </div>
   </header>
 
-  <!-- Center Content -->
   <main class="main-wrap">
     <div class="auth-card">
       <img src="https://mrad.co/image/logo.png" alt="Mrad" class="center-logo" onerror="this.style.display='none'" />
@@ -415,7 +445,6 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="mrad-bottom-footer">
     <div class="mrad-bottom-inner">
       <div class="mrad-bottom-brand">
