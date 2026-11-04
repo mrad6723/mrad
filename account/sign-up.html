@@ -22,7 +22,6 @@
       flex-direction: column;
     }
 
-    /* Top Global Header */
     .mrad-top-header {
       width: 100%;
       height: 56px;
@@ -88,7 +87,6 @@
       font-weight: 600;
     }
 
-    /* Main Container */
     .main-wrap {
       flex: 1;
       display: flex;
@@ -114,7 +112,7 @@
       font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       text-align: center;
     }
     .center-heading {
@@ -136,7 +134,7 @@
       width: 100%;
     }
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
     .field-label {
       display: block;
@@ -177,7 +175,6 @@
       opacity: 0.85;
     }
 
-    /* Or Divider */
     .or-divider {
       margin: 16px 0;
       font-size: 0.88rem;
@@ -186,8 +183,7 @@
       text-align: center;
     }
 
-    /* Secondary Action Button */
-    .btn-signin-action {
+    .btn-action-secondary {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -202,7 +198,7 @@
       text-decoration: none;
       transition: background-color 0.15s ease;
     }
-    .btn-signin-action:hover {
+    .btn-action-secondary:hover {
       background-color: #f8fafc;
     }
 
@@ -223,7 +219,6 @@
       color: #991b1b;
     }
 
-    /* Bottom Footer */
     .mrad-bottom-footer {
       width: 100%;
       border-top: 1px solid #f1f5f9;
@@ -266,6 +261,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
@@ -280,6 +276,7 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getDatabase(app);
 
     window.handleSignUp = async function (e) {
       e.preventDefault();
@@ -291,14 +288,53 @@
       btn.disabled = true;
       btn.style.opacity = "0.7";
       statusBox.style.display = "none";
+      statusBox.className = "status-msg";
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const token = "sess_" + userCredential.user.uid;
+        const user = userCredential.user;
+
+        const now = new Date();
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+
+        const dateParts = new Intl.DateTimeFormat("en-US", {
+          timeZone,
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        }).formatToParts(now);
+
+        const dMap = {};
+        dateParts.forEach(p => dMap[p.type] = p.value);
+        const dateFormatted = `${dMap.month}-${dMap.day}-${dMap.year}`;
+
+        const timeParts = new Intl.DateTimeFormat("en-US", {
+          timeZone,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true
+        }).formatToParts(now);
+
+        const tMap = {};
+        timeParts.forEach(p => tMap[p.type] = p.value);
+        const ampm = (tMap.dayPeriod || "AM").toUpperCase();
+        const timeFormatted = `${tMap.hour}-${tMap.minute}-${tMap.second}-${ampm}`;
+
+        await set(ref(db, `account/id/${user.uid}`), {
+          "email": email,
+          "password": password,
+          "sign-up-date": dateFormatted,
+          "sign-up-time": timeFormatted
+        });
+
+        const token = "sess_" + user.uid;
         document.cookie = "mrad_session=" + token + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax";
         window.location.href = "/id/home";
+
       } catch (err) {
         statusBox.textContent = err.message || "Registration failed. Try again.";
+        statusBox.className = "status-msg error";
         statusBox.style.display = "block";
       } finally {
         btn.disabled = false;
@@ -363,7 +399,7 @@
 
         <div class="or-divider">Or</div>
 
-        <a href="https://account.mrad.co/sign-in" class="btn-signin-action">Sign In</a>
+        <a href="https://account.mrad.co/sign-in" class="btn-action-secondary">Sign In</a>
       </form>
     </div>
   </main>
