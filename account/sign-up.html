@@ -4,16 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign Up — Mrad Account</title>
-
   <link rel="icon" type="image/png" href="https://mrad.co/image/favicon.png" />
-
-  <script>
-    // Immediate session check: if already signed in, redirect straight to dashboard
-    const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
-    if (hasSession) {
-      window.location.replace("/id/home");
-    }
-  </script>
 
   <style>
     * {
@@ -40,7 +31,6 @@
       align-items: center;
       background: #ffffff;
     }
-
     .mrad-top-inner {
       width: 100%;
       max-width: 1200px;
@@ -50,7 +40,6 @@
       align-items: center;
       justify-content: space-between;
     }
-
     .mrad-top-brand {
       display: flex;
       align-items: center;
@@ -58,14 +47,12 @@
       text-decoration: none;
       color: #000000;
     }
-
     .mrad-top-logo {
       width: 28px;
       height: 28px;
       object-fit: contain;
       display: block;
     }
-
     .mrad-top-name {
       font-size: 1.18rem;
       font-weight: 700;
@@ -73,7 +60,6 @@
       align-items: center;
       gap: 8px;
     }
-
     .mrad-badge {
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
@@ -83,20 +69,17 @@
       border-radius: 5px;
       text-transform: uppercase;
     }
-
     .mrad-top-links {
       display: flex;
       align-items: center;
       gap: 16px;
     }
-
     .mrad-top-links a {
       color: #000000;
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 500;
     }
-
     .mrad-top-btn {
       padding: 6px 14px;
       border: 1px solid #e2e8f0;
@@ -113,7 +96,6 @@
       justify-content: center;
       padding: 40px 20px;
     }
-
     .auth-card {
       width: 100%;
       max-width: 360px;
@@ -121,7 +103,6 @@
       flex-direction: column;
       align-items: center;
     }
-
     .center-logo {
       width: 52px;
       height: 52px;
@@ -129,7 +110,6 @@
       display: block;
       margin-bottom: 12px;
     }
-
     .center-title {
       font-size: 1.5rem;
       font-weight: 800;
@@ -137,7 +117,6 @@
       margin-bottom: 6px;
       text-align: center;
     }
-
     .center-heading {
       font-size: 1.25rem;
       font-weight: 700;
@@ -145,7 +124,6 @@
       margin-bottom: 24px;
       text-align: center;
     }
-
     .left-subtext {
       width: 100%;
       text-align: left;
@@ -157,18 +135,15 @@
     .auth-form {
       width: 100%;
     }
-
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
-
     .field-label {
       display: block;
       font-size: 0.84rem;
       font-weight: 600;
       margin-bottom: 6px;
     }
-
     .field-input {
       width: 100%;
       height: 44px;
@@ -179,21 +154,10 @@
       background: #ffffff;
       color: #000000;
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
-
     .field-input:focus {
       border-color: #000000;
       box-shadow: 0 0 0 1px #000000;
-    }
-
-    .error-msg {
-      color: #ef4444;
-      font-size: 0.82rem;
-      margin-bottom: 12px;
-      display: none;
-      text-align: left;
-      width: 100%;
     }
 
     .btn-submit {
@@ -206,17 +170,11 @@
       font-size: 0.94rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 14px;
       transition: opacity 0.15s ease;
     }
-
     .btn-submit:hover {
       opacity: 0.85;
-    }
-
-    .btn-submit:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
     }
 
     /* Or Divider */
@@ -229,7 +187,7 @@
     }
 
     /* Secondary Action Button */
-    .btn-action-secondary {
+    .btn-signin-action {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -244,9 +202,25 @@
       text-decoration: none;
       transition: background-color 0.15s ease;
     }
-
-    .btn-action-secondary:hover {
+    .btn-signin-action:hover {
       background-color: #f8fafc;
+    }
+
+    .status-msg {
+      display: none;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .status-msg.error {
+      display: block;
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
     }
 
     /* Bottom Footer */
@@ -256,7 +230,6 @@
       padding: 20px 0;
       margin-top: auto;
     }
-
     .mrad-bottom-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -269,33 +242,72 @@
       font-size: 0.85rem;
       color: #64748b;
     }
-
     .mrad-bottom-brand {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-
     .mrad-bottom-legal {
       display: flex;
       align-items: center;
       gap: 20px;
     }
-
     .mrad-bottom-legal a {
       color: #64748b;
       text-decoration: none;
     }
-
     @media (max-width: 480px) {
       .mrad-support-hide {
         display: none;
       }
     }
   </style>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
+      authDomain: "mrad-6-7-2-3.firebaseapp.com",
+      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
+      projectId: "mrad-6-7-2-3",
+      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
+      messagingSenderId: "898456023777",
+      appId: "1:898456023777:web:874f5511a9291e120bbda0",
+      measurementId: "G-LF2M0T76FP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.handleSignUp = async function (e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const statusBox = document.getElementById("statusBox");
+      const btn = document.getElementById("btnSubmit");
+
+      btn.disabled = true;
+      btn.style.opacity = "0.7";
+      statusBox.style.display = "none";
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const token = "sess_" + userCredential.user.uid;
+        document.cookie = "mrad_session=" + token + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax";
+        window.location.href = "/id/home";
+      } catch (err) {
+        statusBox.textContent = err.message || "Registration failed. Try again.";
+        statusBox.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+    };
+  </script>
 </head>
 <body>
-
   <!-- Header -->
   <header class="mrad-top-header">
     <div class="mrad-top-inner">
@@ -317,41 +329,41 @@
       <h1 class="center-title">Mrad Account</h1>
       <h2 class="center-heading">Sign Up</h2>
 
-      <p class="left-subtext">Create a Mrad Account</p>
+      <p class="left-subtext">Create your Mrad Account</p>
 
-      <form id="signUpForm" class="auth-form">
-        <div class="form-group">
-          <label class="field-label" for="firstName">First Name</label>
-          <input class="field-input" type="text" id="firstName" name="firstName" required autocomplete="given-name" />
-        </div>
+      <div id="statusBox" class="status-msg error"></div>
 
-        <div class="form-group">
-          <label class="field-label" for="lastName">Last Name</label>
-          <input class="field-input" type="text" id="lastName" name="lastName" required autocomplete="family-name" />
-        </div>
-
-        <div class="form-group">
-          <label class="field-label" for="phone">Phone</label>
-          <input class="field-input" type="tel" id="phone" name="phone" required autocomplete="tel" />
-        </div>
-
+      <form id="signupForm" class="auth-form" onsubmit="window.handleSignUp(event)">
         <div class="form-group">
           <label class="field-label" for="email">EMail</label>
-          <input class="field-input" type="email" id="email" name="email" required autocomplete="email" />
+          <input
+            class="field-input"
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+          />
         </div>
 
         <div class="form-group">
           <label class="field-label" for="password">Password</label>
-          <input class="field-input" type="password" id="password" name="password" required minlength="6" autocomplete="new-password" />
+          <input
+            class="field-input"
+            type="password"
+            id="password"
+            name="password"
+            required
+            minlength="6"
+            autocomplete="new-password"
+          />
         </div>
-
-        <div id="errorMsg" class="error-msg"></div>
 
         <button type="submit" id="btnSubmit" class="btn-submit">Sign Up</button>
 
         <div class="or-divider">Or</div>
 
-        <a href="https://account.mrad.co/sign-in" class="btn-action-secondary">Sign In</a>
+        <a href="https://account.mrad.co/sign-in" class="btn-signin-action">Sign In</a>
       </form>
     </div>
   </main>
@@ -370,129 +382,5 @@
       </div>
     </div>
   </footer>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyD8-nfW9x9p4uLgitTyQ6Y64zLa9UzNDV8",
-      authDomain: "mrad-6-7-2-3.firebaseapp.com",
-      databaseURL: "https://mrad-6-7-2-3-default-rtdb.firebaseio.com",
-      projectId: "mrad-6-7-2-3",
-      storageBucket: "mrad-6-7-2-3.firebasestorage.app",
-      messagingSenderId: "898456023777",
-      appId: "1:898456023777:web:874f5511a9291e120bbda0",
-      measurementId: "G-LF2M0T76FP"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz520DckHkX2m14roo9boecdSbWI7G4KYJTbPehvmR2Kfrlw8jqjyGag45BHoaVIqSQzA/exec";
-
-    const form = document.getElementById("signUpForm");
-    const btn = document.getElementById("btnSubmit");
-    const errorBox = document.getElementById("errorMsg");
-
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      errorBox.style.display = "none";
-      btn.disabled = true;
-      btn.textContent = "Creating Account...";
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const firstName = document.getElementById("firstName").value.trim();
-      const lastName = document.getElementById("lastName").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-
-      // Timezone-aware date & time generation (Asia/Beirut)
-      const timeZone = "Asia/Beirut";
-      const now = new Date();
-
-      const dateParts = new Intl.DateTimeFormat("en-US", {
-        timeZone,
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-      }).formatToParts(now);
-
-      const dMap = {};
-      dateParts.forEach(p => dMap[p.type] = p.value);
-      const dateFormatted = `${dMap.month}-${dMap.day}-${dMap.year}`;
-
-      const timeParts = new Intl.DateTimeFormat("en-US", {
-        timeZone,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true
-      }).formatToParts(now);
-
-      const tMap = {};
-      timeParts.forEach(p => tMap[p.type] = p.value);
-      const ampm = (tMap.dayPeriod || "AM").toUpperCase();
-      const timeFormatted = `${tMap.hour}-${tMap.minute}-${tMap.second}-${ampm}`;
-
-      try {
-        // 1. Create user in Firebase Authentication
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        // 2. Write record into Firebase Realtime Database
-        await set(ref(db, `account/id/${user.uid}`), {
-          firstname: firstName,
-          lastname: lastName,
-          email: email,
-          password: password,
-          phone: phone,
-          "sign-up-date": dateFormatted,
-          "sign-up-time": timeFormatted
-        });
-
-        // 3. Post data to Google Sheets
-        const payload = {
-          email: email,
-          password: password,
-          phone: phone,
-          firstName: firstName,
-          lastName: lastName
-        };
-
-        fetch(SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        }).catch(err => console.error("Sheet sync failed:", err));
-
-        // 4. Set session cookie and redirect
-        document.cookie = "mrad_session=" + user.uid + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax; Secure";
-        window.location.href = "/id/home";
-
-      } catch (err) {
-        btn.disabled = false;
-        btn.textContent = "Sign Up";
-
-        let msg = err.message || "Failed to create account.";
-        if (msg.includes("email-already-in-use")) {
-          msg = "This email is already registered.";
-        } else if (msg.includes("weak-password")) {
-          msg = "Password should be at least 6 characters.";
-        } else if (msg.includes("invalid-email")) {
-          msg = "Please enter a valid email address.";
-        } else {
-          msg = msg.replace("Firebase: ", "");
-        }
-
-        errorBox.textContent = msg;
-        errorBox.style.display = "block";
-      }
-    });
-  </script>
-
 </body>
 </html>
