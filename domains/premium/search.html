@@ -584,8 +584,8 @@
 
       // Read initial URL parameter queries (e.g. /premium/search?q=booth)
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has("q")) {
-        keywordInput.value = urlParams.get("q");
+      if (urlParams.has("domain") || urlParams.has("q")) {
+        keywordInput.value = urlParams.get("domain") || urlParams.get("q");
       }
 
       // Populate TLD Chips

@@ -408,9 +408,9 @@
 
         <div class="mrad-quick-links">
           <span>Popular searches:</span>
-          <a href="/premium/search?q=ai">AI</a>
-          <a href="/premium/search?q=tech">Tech</a>
-          <a href="/premium/search?q=cloud">Cloud</a>
+          <a href="/premium/search?domain=ai">AI</a>
+          <a href="/premium/search?domain=tech">Tech</a>
+          <a href="/premium/search?domain=cloud">Cloud</a>
           <a href="/premium/all">Browse All Domains &rarr;</a>
         </div>
       </div>
@@ -490,7 +490,7 @@
         e.preventDefault();
         const q = searchInput.value.trim();
         if (q) {
-          window.location.href = `/premium/search?q=${encodeURIComponent(q)}`;
+          window.location.href = `/premium/search?domain=${encodeURIComponent(q)}`;
         }
       });
 
