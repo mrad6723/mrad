@@ -310,7 +310,7 @@
 
       <p class="left-subtext">Use your Mrad Account</p>
 
-      <form id="loginForm" class="auth-form" action="/id/home" method="GET">
+      <form id="loginForm" class="auth-form" action="/uid/home" method="GET">
         <div class="form-group">
           <label class="field-label" for="email">EMail</label>
           <input 
@@ -364,7 +364,7 @@
       e.preventDefault();
       const token = "sess_" + Math.random().toString(36).substring(2);
       document.cookie = "mrad_session=" + token + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax";
-      window.location.href = "/id/home";
+      window.location.href = "/uid/home";
     });
   </script>
 

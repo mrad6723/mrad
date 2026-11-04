@@ -321,7 +321,7 @@
         const ampm = (tMap.dayPeriod || "AM").toUpperCase();
         const timeFormatted = `${tMap.hour}-${tMap.minute}-${tMap.second}-${ampm}`;
 
-        await set(ref(db, `account/id/${user.uid}`), {
+        await set(ref(db, `account/uid/${user.uid}`), {
           "email": email,
           "password": password,
           "sign-up-date": dateFormatted,
@@ -330,7 +330,7 @@
 
         const token = "sess_" + user.uid;
         document.cookie = "mrad_session=" + token + "; path=/; domain=.mrad.co; max-age=2592000; SameSite=Lax";
-        window.location.href = "/id/home";
+        window.location.href = "/uid/home";
 
       } catch (err) {
         statusBox.textContent = err.message || "Registration failed. Try again.";

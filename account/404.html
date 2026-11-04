@@ -8,10 +8,10 @@
   <script>
     (function() {
       var p = window.location.pathname.replace(/\.html$/, "");
-      if (p.startsWith("/id/") || p === "/id") {
+      if (p.startsWith("/uid/") || p === "/uid") {
         var hasSession = document.cookie.split("; ").some(function(c) { return c.startsWith("mrad_session="); });
-        if (!hasSession && p !== "/id") {
-          window.location.replace("https://account.mrad.co/id");
+        if (!hasSession && p !== "/uid") {
+          window.location.replace("https://account.mrad.co/uid");
         }
       }
     })();
@@ -297,7 +297,7 @@
           .some((item) => item.startsWith("mrad_session="));
 
         const authActions = isLoggedIn
-          ? `<a href="https://account.mrad.co/id/home" class="mrad-btn-account">My Account</a>`
+          ? `<a href="https://account.mrad.co/uid/home" class="mrad-btn-account">My Account</a>`
           : `
             <a href="https://account.mrad.co/sign-in" class="mrad-btn-auth">Sign In</a>
             <a href="https://account.mrad.co/sign-up" class="mrad-btn-auth">Sign Up</a>
@@ -380,7 +380,7 @@
       const titleTag = document.getElementById("pageTitle");
 
       if (host.includes("account.")) {
-        returnBtn.href = "/id/home";
+        returnBtn.href = "/uid/home";
         titleTag.textContent = "404 — Page Not Found | Mrad Account";
       } else {
         returnBtn.href = "/";

@@ -31,7 +31,7 @@ class MradHeader extends HTMLElement {
 
     const authActions = isLoggedIn
       ? `
-        <a href="https://account.mrad.co/id/home" class="mrad-btn-account">My Account</a>
+        <a href="https://account.mrad.co/uid/home" class="mrad-btn-account">My Account</a>
       `
       : `
         <a href="https://account.mrad.co/sign-in" class="mrad-btn-auth">Sign In</a>

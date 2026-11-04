@@ -4,9 +4,9 @@ class MradFooterNav extends HTMLElement {
       <div class="mrad-footer-columns">
         <div class="mrad-col">
           <h4>Account Management</h4>
-          <a href="/id/home">Profile Overview</a>
-          <a href="/id/security">Password & 2FA</a>
-          <a href="/id/billing">Payment Methods</a>
+          <a href="/uid/home">Profile Overview</a>
+          <a href="/uid/security">Password & 2FA</a>
+          <a href="/uid/billing">Payment Methods</a>
         </div>
         <div class="mrad-col">
           <h4>Services Connected</h4>

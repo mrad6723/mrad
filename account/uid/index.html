@@ -11,7 +11,7 @@
     // Immediate session check: if already signed in, redirect straight to dashboard
     const hasSession = document.cookie.split("; ").some(c => c.startsWith("mrad_session="));
     if (hasSession) {
-      window.location.replace("/id/home");
+      window.location.replace("/uid/home");
     }
   </script>
 
