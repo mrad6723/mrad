@@ -11,14 +11,14 @@ class MradHeaderNav extends HTMLElement {
       <nav class="mrad-local-nav">
         <div class="mrad-local-container">
 
-          <!-- Domains Dropdown -->
+          <!-- Tab 1: Domains (No Link) -->
           <div class="mrad-nav-item ${activeMenu === 'domains' ? 'active' : ''}">
-            <a href="https://domains.mrad.co/" class="mrad-nav-parent">
+            <button type="button" class="mrad-nav-trigger">
               Domains
               <svg class="mrad-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1 1L5 5L9 1"/>
               </svg>
-            </a>
+            </button>
             <div class="mrad-dropdown-menu">
               <a href="https://domains.mrad.co/search">Search</a>
               <a href="https://domains.mrad.co/register">Register</a>
@@ -26,17 +26,19 @@ class MradHeaderNav extends HTMLElement {
             </div>
           </div>
 
-          <!-- Premium Dropdown -->
+          <!-- Tab 2: Premium (No Link) -->
           <div class="mrad-nav-item ${activeMenu === 'premium' ? 'active' : ''}">
-            <a href="https://domains.mrad.co/premium" class="mrad-nav-parent">
+            <button type="button" class="mrad-nav-trigger">
               Premium
               <svg class="mrad-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1 1L5 5L9 1"/>
               </svg>
-            </a>
+            </button>
             <div class="mrad-dropdown-menu">
-              <a href="https://domains.mrad.co/premium/search">Search</a>
-              <a href="https://domains.mrad.co/premium/all">Explore</a>
+              <a href="https://domains.mrad.co/premium">Search</a>
+              <a href="https://domains.mrad.co/premium/search">Advanced Search</a>
+              <a href="https://domains.mrad.co/premium/all">All</a>
+              <a href="https://domains.mrad.co/premium/sell">Sell</a>
             </div>
           </div>
 
@@ -78,15 +80,20 @@ class MradHeaderNav extends HTMLElement {
           height: 100%;
         }
 
-        .mrad-nav-parent {
+        .mrad-nav-trigger {
+          background: none;
+          border: none;
+          outline: none;
+          cursor: pointer;
           color: #000000;
-          text-decoration: none;
           font-size: 0.88rem;
           font-weight: 500;
+          font-family: inherit;
           height: 100%;
           display: inline-flex;
           align-items: center;
           gap: 6px;
+          padding: 0;
           transition: opacity 0.15s ease;
           position: relative;
         }
@@ -95,15 +102,16 @@ class MradHeaderNav extends HTMLElement {
           transition: transform 0.15s ease;
         }
 
-        .mrad-nav-item:hover .mrad-arrow {
+        .mrad-nav-item:hover .mrad-arrow,
+        .mrad-nav-item.open .mrad-arrow {
           transform: rotate(180deg);
         }
 
-        .mrad-nav-item:hover .mrad-nav-parent {
+        .mrad-nav-item:hover .mrad-nav-trigger {
           opacity: 0.7;
         }
 
-        .mrad-nav-item.active .mrad-nav-parent {
+        .mrad-nav-item.active .mrad-nav-trigger {
           font-weight: 700;
           opacity: 1;
         }
@@ -119,13 +127,12 @@ class MradHeaderNav extends HTMLElement {
           border-radius: 2px;
         }
 
-        /* Dropdown Popover */
         .mrad-dropdown-menu {
           display: none;
           position: absolute;
           top: 100%;
           left: 0;
-          min-width: 160px;
+          min-width: 175px;
           background: #ffffff;
           border: 1px solid #e2e8f0;
           border-radius: 8px;
@@ -134,7 +141,8 @@ class MradHeaderNav extends HTMLElement {
           z-index: 10000;
         }
 
-        .mrad-nav-item:hover .mrad-dropdown-menu {
+        .mrad-nav-item:hover .mrad-dropdown-menu,
+        .mrad-nav-item.open .mrad-dropdown-menu {
           display: flex;
           flex-direction: column;
         }
@@ -155,6 +163,22 @@ class MradHeaderNav extends HTMLElement {
         }
       </style>
     `;
+
+    // Support tap to toggle on mobile devices
+    const navItems = this.querySelectorAll(".mrad-nav-item");
+    navItems.forEach((item) => {
+      const btn = item.querySelector(".mrad-nav-trigger");
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = item.classList.contains("open");
+        navItems.forEach((n) => n.classList.remove("open"));
+        if (!isOpen) item.classList.add("open");
+      });
+    });
+
+    document.addEventListener("click", () => {
+      navItems.forEach((n) => n.classList.remove("open"));
+    });
   }
 }
 
