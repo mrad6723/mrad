@@ -282,7 +282,6 @@
             <th>Domain Asset</th>
             <th>TLD</th>
             <th>Buy Now</th>
-            <th>Monthly Lease</th>
             <th>Installment</th>
             <th style="text-align: right;">Action</th>
           </tr>
@@ -348,10 +347,7 @@
                   ${formatPrice(item.buyPrice)}
                 </td>
                 <td>
-                  ${formatPrice(item.rentPrice, "/mo")}
-                </td>
-                <td>
-                  ${formatPrice(item.installmentPrice, "/mo")}
+                  ${item.installmentPrice ? `${Number(item.installmentPrice).toLocaleString()}/month for 24 months` : "—"}
                 </td>
                 <td style="text-align: right;">
                   <a href="${viewUrl}" class="mrad-btn-view">View</a>

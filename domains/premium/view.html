@@ -324,7 +324,7 @@
         </div>
 
         <h1 class="mrad-domain-name" id="dispDomain">domain<span>.ext</span></h1>
-        <p class="mrad-domain-subtitle">Exclusive high-authority digital brand available for direct acquisition, lease, or structured installment transfer.</p>
+        <p class="mrad-domain-subtitle">Exclusive high-authority digital brand available for direct acquisition or structured installment plans.</p>
 
         <div class="mrad-specs-grid">
           <div class="mrad-spec-item">
@@ -350,10 +350,7 @@
         </div>
 
         <div class="mrad-alt-pricing">
-          <div class="mrad-alt-row" id="rowRent">
-            <span class="alt-lbl">Monthly Lease</span>
-            <span class="alt-val" id="dispRentPrice">—</span>
-          </div>
+          
           <div class="mrad-alt-row" id="rowInstallment">
             <span class="alt-lbl">Installment</span>
             <span class="alt-val" id="dispInstallmentPrice">—</span>
@@ -419,16 +416,11 @@
       const buyFormatted = fmt(domainData.buyPrice);
       document.getElementById("dispBuyPrice").textContent = buyFormatted || "Make Offer";
 
-      const rentFormatted = fmt(domainData.rentPrice);
-      if (rentFormatted) {
-        document.getElementById("dispRentPrice").textContent = `${rentFormatted}/mo`;
-      } else {
-        document.getElementById("rowRent").style.display = "none";
-      }
+      
 
       const instFormatted = fmt(domainData.installmentPrice);
       if (instFormatted) {
-        document.getElementById("dispInstallmentPrice").textContent = `${instFormatted}/mo`;
+        document.getElementById("dispInstallmentPrice").textContent = `${instFormatted}/month for 24 months`;
       } else {
         document.getElementById("rowInstallment").style.display = "none";
       }

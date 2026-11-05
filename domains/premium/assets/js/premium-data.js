@@ -63,8 +63,7 @@ const MRAD_PREMIUM = (function () {
     const nameIdx = findIndex(["name"], 1);
     const extIdx = findIndex(["ext"], 2);
     const buyIdx = findIndex(["buy"], 3);
-    const rentIdx = findIndex(["rent"], 4);
-    const instIdx = findIndex(["installment"], 5);
+    const instIdx = findIndex(["installment"], 4);
 
     const items = [];
     for (let i = 1; i < rows.length; i++) {
@@ -86,7 +85,6 @@ const MRAD_PREMIUM = (function () {
         name: name,
         extension: extension.toLowerCase(),
         buyPrice: cleanPrice(r[buyIdx]),
-        rentPrice: cleanPrice(r[rentIdx]),
         installmentPrice: cleanPrice(r[instIdx]),
       });
     }

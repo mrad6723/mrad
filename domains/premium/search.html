@@ -478,7 +478,6 @@
       const minPriceInput = document.getElementById("filterMinPrice");
       const maxPriceInput = document.getElementById("filterMaxPrice");
       const checkBuy = document.getElementById("checkBuyOnly");
-      const checkRent = document.getElementById("checkRentAvailable");
       const checkInst = document.getElementById("checkInstallmentAvailable");
       const sortSelect = document.getElementById("searchSort");
       const chipsContainer = document.getElementById("tldChipsContainer");
@@ -507,7 +506,6 @@
             const baseName = item.name || item.domain.replace(ext, "");
             const viewUrl = `/premium/view?domain=${encodeURIComponent(item.domain)}`;
             const buyPrice = formatPrice(item.buyPrice);
-            const rentPrice = formatPrice(item.rentPrice);
             const instPrice = formatPrice(item.installmentPrice);
 
             return `
@@ -525,13 +523,11 @@
                 <div class="mrad-card-pricing">
                   <div class="mrad-card-price-main">${buyPrice || "Make Offer"}</div>
                   ${
-                    rentPrice
-                      ? `<div class="mrad-card-alt-price">Lease: ${rentPrice}/mo</div>`
-                      : ""
+                    ""
                   }
                   ${
                     instPrice
-                      ? `<div class="mrad-card-alt-price">Installment: ${instPrice}/mo</div>`
+                      ? `<div class="mrad-card-alt-price">${item.installmentPrice ? `${Number(item.installmentPrice).toLocaleString()}/month for 24 months` : ""}</div>`
                       : ""
                   }
                   <a href="${viewUrl}" class="mrad-card-btn">View Asset</a>
@@ -548,7 +544,6 @@
         const minP = parseFloat(minPriceInput.value);
         const maxP = parseFloat(maxPriceInput.value);
         const requireBuy = checkBuy.checked;
-        const requireRent = checkRent.checked;
         const requireInst = checkInst.checked;
         const sortVal = sortSelect.value;
 
@@ -559,7 +554,6 @@
           if (!isNaN(minP) && (d.buyPrice === null || d.buyPrice < minP)) return false;
           if (!isNaN(maxP) && (d.buyPrice === null || d.buyPrice > maxP)) return false;
           if (requireBuy && d.buyPrice === null) return false;
-          if (requireRent && d.rentPrice === null) return false;
           if (requireInst && d.installmentPrice === null) return false;
           if (activeTld !== "all" && d.extension.toLowerCase() !== activeTld) return false;
           return true;
@@ -618,7 +612,7 @@
       [keywordInput, lengthInput, minPriceInput, maxPriceInput].forEach((el) =>
         el.addEventListener("input", applyFilters)
       );
-      [checkBuy, checkRent, checkInst, sortSelect].forEach((el) =>
+      [checkBuy, checkInst, sortSelect].forEach((el) =>
         el.addEventListener("change", applyFilters)
       );
 
@@ -628,7 +622,6 @@
         minPriceInput.value = "";
         maxPriceInput.value = "";
         checkBuy.checked = false;
-        checkRent.checked = false;
         checkInst.checked = false;
         activeTld = "all";
         document.querySelectorAll(".mrad-chip").forEach((c) => c.classList.remove("active"));
