@@ -1,3 +1,20 @@
+// Google Analytics (G-CSYX22RS7X)
+(function() {
+  if (!document.getElementById("mrad-ga-script")) {
+    const gaScript = document.createElement("script");
+    gaScript.id = "mrad-ga-script";
+    gaScript.async = true;
+    gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-CSYX22RS7X";
+    document.head.appendChild(gaScript);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { window.dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag("js", new Date());
+    gtag("config", "G-CSYX22RS7X");
+  }
+})();
+
 class MradHeader extends HTMLElement {
   connectedCallback() {
     const host = window.location.hostname.toLowerCase();
